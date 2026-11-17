@@ -1,3 +1,4 @@
+from config.config import TOP_K_RESULTS
 from rag.llm import get_llm
 from rag.retriever import get_retriever
 from rag.prompt_builder import (
@@ -8,7 +9,7 @@ from rag.schemas import RAGResponse
 
 def ask_question(
     question:str,
-    k: int=3,    
+    k: int=TOP_K_RESULTS,
 )->RAGResponse:
     """
     Execute complete RAG pipeline.

@@ -45,6 +45,9 @@ This ensures answers are generated from actual institutional documents rather th
 * 🧩 Modular RAG architecture
 * 📂 Support for multiple document categories
 * ⚡ Fast retrieval and response generation
+* 📑 Source citations (file name and page) for every answer
+* 🌐 Web-based user interface built with Streamlit
+* 🖨️ OCR support for scanned PDFs (Tesseract + Poppler)
 
 ---
 
@@ -78,6 +81,7 @@ MNITRAG_SYSTEM/
 │
 ├── app.py
 ├── requirements.txt
+├── .env.example
 │
 ├── config/
 │   └── config.py
@@ -87,6 +91,9 @@ MNITRAG_SYSTEM/
 │       ├── faculty/
 │       ├── public/
 │       └── student/
+│
+├── utils/
+│   └── inspect_pdfs.py
 │
 └── rag/
     ├── loader.py
@@ -165,45 +172,90 @@ The system currently supports institutional documents including:
 
 ## ⚙️ Installation
 
-Clone the repository:
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/ganeshkds84/MNITRAG_SYSTEM.git
 cd MNITRAG_SYSTEM
 ```
 
-Create a virtual environment:
+> **Windows note:** clone into a short path such as `C:\PROJECTS\`. Installing `torch`
+> (pulled in by `sentence-transformers`) fails inside deep folders because of Windows'
+> 260-character path limit. Alternatively, [enable long paths in Windows](https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation#enable-long-paths-in-windows-10-version-1607-and-later).
+
+### 2. Create and activate a virtual environment
 
 ```bash
 python -m venv .venv
 ```
 
-Activate the environment:
-
-### Windows
+Windows:
 
 ```bash
 .venv\Scripts\activate
 ```
 
-### Linux / macOS
+Linux / macOS:
 
 ```bash
 source .venv/bin/activate
 ```
 
-Install dependencies:
+### 3. Install Python dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
+
+### 4. Install Tesseract and Poppler (needed for OCR of scanned PDFs)
+
+**Windows**
+
+* Tesseract: install the 64-bit build from the [UB-Mannheim installer](https://github.com/UB-Mannheim/tesseract/wiki) (default path `C:\Program Files\Tesseract-OCR\tesseract.exe`).
+* Poppler: download the latest release zip from [poppler-windows](https://github.com/oschwartz10612/poppler-windows/releases) and extract it; the binaries are in its `Library\bin` folder.
+
+**Linux / macOS**
+
+```bash
+sudo apt install tesseract-ocr poppler-utils   # Debian/Ubuntu
+brew install tesseract poppler                 # macOS
+```
+
+### 5. Configure environment variables
+
+Copy `.env.example` to `.env` and add your Groq API key:
+
+```bash
+cp .env.example .env        # Windows: copy .env.example .env
+```
+
+```text
+GROQ_API_KEY=your_groq_api_key
+```
+
+If Tesseract or Poppler are **not** on your PATH (common on Windows), also set:
+
+```text
+TESSERACT_CMD=C:\Program Files\Tesseract-OCR\tesseract.exe
+POPPLER_PATH=C:\path\to\poppler\Library\bin
+```
+
+### 6. Build the vector store
+
+Place the PDFs under `data/Raw/` (subfolders `faculty/`, `public/`, `student/`), then run:
+
+```bash
+python -m rag.ingest
+```
+
+Use `--data-dir` to ingest a different folder. Re-run this whenever the documents change.
 
 ---
 
 ## ▶️ Run the Application
 
 ```bash
-python app.py
+streamlit run app.py
 ```
 
 ---
@@ -227,9 +279,7 @@ MNITRAG_SYSTEM improves information accessibility by enabling students, faculty,
 
 ## 🔮 Future Enhancements
 
-* Source citations in responses
 * Hybrid retrieval (semantic + keyword)
-* Web-based user interface
 * Chat history and memory
 * Multi-language support
 * Role-based access control

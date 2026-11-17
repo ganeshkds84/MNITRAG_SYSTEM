@@ -1,8 +1,9 @@
 from langchain_core.vectorstores import VectorStoreRetriever
 
+from config.config import TOP_K_RESULTS
 from rag.vectordb import get_vector_store
 
-def get_retriever(k: int=3)->VectorStoreRetriever:
+def get_retriever(k: int=TOP_K_RESULTS)->VectorStoreRetriever:
     """
     Create a retriever from ChromaDB
 

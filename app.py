@@ -2,6 +2,7 @@ import streamlit as st
 import os
 
 from rag.pipeline import ask_question
+from rag.vectordb import get_vector_store_stats
 
 st.set_page_config(
     page_title="MNIT ASSISTANT",
@@ -9,28 +10,30 @@ st.set_page_config(
     layout="wide"
 )
 
+stats=get_vector_store_stats()
+
 with st.sidebar:
     
     st.header("MNITRAG")
     
     st.markdown(
-        """
+        f"""
         **LLM:** Groq
         
         **Embeddings:** all-MiniLM-L6-v2
         
         **Vector DB:** ChromaDB
         
-        **Documnets:** 22 PDFs
+        **Documents:** {stats["sources"]} PDFs
         
-        **Chunks:** 1055
+        **Chunks:** {stats["chunks"]}
         """
     )
     
     st.divider()
     
     st.markdown(
-        "Retrieval-Augmented Generation"
+        "Retrieval-Augmented Generation "
         "system for MNIT documents."
     )
 
@@ -39,6 +42,15 @@ st.title("📚 MNIT ASSISTANT")
 st.markdown(
     "AI-powered assistant for MNIT academic and administrative documents."
 )
+
+if stats["chunks"]==0:
+    st.error(
+        "The vector store is missing or empty. "
+        "Build it first by running:\n\n"
+        "`python -m rag.ingest`\n\n"
+        "then refresh this page."
+    )
+    st.stop()
 
 question=st.text_input(
     "Enter your question"

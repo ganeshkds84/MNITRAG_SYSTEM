@@ -1,3 +1,4 @@
+import argparse
 import os
 
 from rag.loader import load_pdf
@@ -99,6 +100,31 @@ def ingest_folder(folder_path: str):
             print(f"  - {skipped}")
     else:
         print("No PDFs were skipped")
-    
+
     print("="*60)
+
+
+def main():
+    """
+    Command-line entry point:
+        python -m rag.ingest [--data-dir data/Raw]
+    """
+    parser=argparse.ArgumentParser(
+        description="Rebuild the vector store from a folder of PDFs."
+    )
+    parser.add_argument(
+        "--data-dir",
+        default="data/Raw",
+        help="Folder containing PDFs (default: data/Raw)"
+    )
+    args=parser.parse_args()
+
+    if not os.path.isdir(args.data_dir):
+        parser.error(f"Folder not found: {args.data_dir}")
+
+    ingest_folder(args.data_dir)
+
+
+if __name__=="__main__":
+    main()
                 

@@ -1,3 +1,10 @@
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 # ===========================
 # Groq Configuration
 # ===========================
@@ -35,3 +42,21 @@ CHUNK_OVERLAP = 200
 # ===========================
 
 TOP_K_RESULTS = 4
+
+
+# ===========================
+# OCR Configuration (scanned PDFs)
+# ===========================
+
+# Pages with fewer extracted characters than this are OCR'd
+OCR_MIN_CHARS = 30
+
+OCR_LANGUAGE = "eng"
+
+OCR_DPI = 300
+
+# Read from .env / environment. Leave unset (None) if tesseract and
+# Poppler's pdftoppm are already on PATH (typical on Linux/macOS).
+TESSERACT_CMD = os.getenv("TESSERACT_CMD") or None
+
+POPPLER_PATH = os.getenv("POPPLER_PATH") or None

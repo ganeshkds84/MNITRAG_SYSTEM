@@ -7,3 +7,5 @@ sentence-transformers
 streamlit
 python-dotenv
 pypdf
+pytesseract
+pdf2image

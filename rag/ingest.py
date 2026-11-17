@@ -18,6 +18,7 @@ def ingest_folder(folder_path: str):
     
     total_chunks=0
     total_files=0
+    skipped_files=[]
     
     for root, _, files in os.walk(folder_path):
         
@@ -39,17 +40,33 @@ def ingest_folder(folder_path: str):
             
             if not documents:
                 print(
-                    f"Skipping {file_name}"
+                    f"Skipping {file_name} "
                     f"(empty PDF)"
                 )
+                skipped_files.append(
+                    f"{pdf_path} (empty PDF)"
+                )
                 continue
+            
+            ocr_pages=sum(
+                1 for doc in documents
+                if doc.metadata.get("ocr")
+            )
+            
+            print(
+                f"Loaded {len(documents)} pages "
+                f"({ocr_pages} via OCR)"
+            )
             
             chunks=split_documents(documents)
             
             if not chunks:
                 print(
-                    f"Skipping {file_name}"
+                    f"Skipping {file_name} "
                     f"(no chunks generated)"
+                )
+                skipped_files.append(
+                    f"{pdf_path} (no chunks generated)"
                 )
                 continue
             
@@ -73,6 +90,15 @@ def ingest_folder(folder_path: str):
     print(
         f"Stored {total_chunks} chunks"
     )
+    
+    if skipped_files:
+        print(
+            f"\nSkipped {len(skipped_files)} PDFs:"
+        )
+        for skipped in skipped_files:
+            print(f"  - {skipped}")
+    else:
+        print("No PDFs were skipped")
     
     print("="*60)
                 

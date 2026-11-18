@@ -1,0 +1,88 @@
+Eval run: 2026-11-18 15:55 | TOP_K_RESULTS=4
+================================================================================
+Q1: What is the M.Tech tuition fee?
+Expected doc:    FeePG2025-26.pdf
+Expected answer: Rs 35,000 per semester (2025-26, general); mentions older 2024-25 value
+Retrieval rank:  14 (sent to LLM: no)
+--------------------------------------------------------------------------------
+The fee structure for M.Tech. (full‑time) students in the 2023‑24 session lists a **Registration Fee / Tuition Fee of 1,000.00** for both odd and even semesters (i.e., the tuition charge per semester)【PG_2023-24.pdf, page 3】.  
+
+*Note: This information comes from a scanned/OCR page, so the numbers may contain recognition errors.*
+--------------------------------------------------------------------------------
+Sources:
+  - PG_2023-24.pdf | page 1 | faculty | year 2023-24
+  - PG_2023-24.pdf | page 3 | faculty | year 2023-24
+  - UG_2023-24.pdf | page 3 | student | year 2023-24
+
+================================================================================
+Q2: What is the CGPA to percentage conversion formula?
+Expected doc:    CGPAConversion Formula2016.pdf
+Expected answer: % Marks = CGPA x 10 (2016 order, supersedes 2014)
+Retrieval rank:  5 (sent to LLM: no)
+--------------------------------------------------------------------------------
+The conversion formula used by MNIT Jaipur is:
+
+**% Marks = CGPA × 10**  
+
+( PG_Manual2024S.pdf, page 89 )  
+
+*Note: An earlier 2014 document (CGPAConversion Formula2014.pdf, page 1) is an OCR‑scanned page and the text appears garbled, so the reliable formula is taken from the most recent 2024 source.*
+--------------------------------------------------------------------------------
+Sources:
+  - CGPAConversion Formula2014.pdf | page 1 | student | year 2014
+  - PG_Manual2024S.pdf | page 89 | faculty | year 2024S
+  - PG_Manual2022.pdf | page 80 | faculty | year 2022
+  - UGRegulationsManual2024.pdf | page 30 | student | year 2024
+
+================================================================================
+Q3: What is the CGPA requirement for direct PhD admission for B.Tech students?
+Expected doc:    Revision of CGPA req from 9 to 8 for direct admission to PhD for BTechB.Arch qualified students.pdf
+Expected answer: CGPA 8 (reduced from 9 by the 2021 order); PG_Manual2024S may state a different scheme value
+Retrieval rank:  31 (sent to LLM: no)
+--------------------------------------------------------------------------------
+For direct admission to a Ph.D. program from a B.Tech. (or B.Arch.) degree, the candidate must have **at least 80 % marks or an equivalent CGPA** in the bachelor’s degree, together with a valid GATE score (PG_Manual2024S.pdf, page 32, year 2024S).
+--------------------------------------------------------------------------------
+Sources:
+  - PG_Manual2022.pdf | page 50 | faculty | year 2022
+  - PG_Manual2024S.pdf | page 41 | faculty | year 2024S
+  - PG_Manual2024S.pdf | page 32 | faculty | year 2024S
+  - PG_Manual2022.pdf | page 20 | faculty | year 2022
+
+================================================================================
+Q4: What is the internship duration for PG students?
+Expected doc:    InternshipGuidelinesUGPG.pdf
+Expected answer: More than 6 months, up to one year; no duplicate sources
+Retrieval rank:  2 (sent to LLM: yes)
+--------------------------------------------------------------------------------
+PG students may undertake an industrial‑training/internship that can extend **beyond 6 months and up to one year**, typically spanning the III and IV semesters of their programme (Internship Guidelines for PG students)【PG_Manual2022.pdf, page 40】. The same provision appears in the earlier “InternshipGuidelinesUGPG.pdf” (page 2)【InternshipGuidelinesUGPG.pdf, page 2】.  
+
+*Note: The 2024‑S manual does not specify a duration, so the most recent source that gives a clear duration is the 2022 manual.*
+--------------------------------------------------------------------------------
+Sources:
+  - PG_Manual2024S.pdf | page 76 | faculty | year 2024S
+  - InternshipGuidelinesUGPG.pdf | page 2 | faculty | year unknown
+  - PG_Manual2022.pdf | page 39 | faculty | year 2022
+  - PG_Manual2022.pdf | page 40 | faculty | year 2022
+
+================================================================================
+Q5: Who is the director of IIT Bombay?
+Expected doc:    (none, fallback expected)
+Expected answer: I could not find the answer in the provided documents.
+Retrieval rank:  - (sent to LLM: -)
+--------------------------------------------------------------------------------
+I could not find the answer in the provided documents.
+--------------------------------------------------------------------------------
+Sources (hidden in app: exact fallback):
+  - PG_Manual2022.pdf | page 57 | faculty | year 2022
+  - PG_Manual2022.pdf | page 59 | faculty | year 2022
+  - PG_Manual2024S.pdf | page 9 | faculty | year 2024S
+  - PG_Manual2024S.pdf | page 1 | faculty | year 2024S
+
+================================================================================
+SUMMARY
+Q    rank  in ctx  expected doc
+Q1     14      no  FeePG2025-26.pdf
+Q2      5      no  CGPAConversion Formula2016.pdf
+Q3     31      no  Revision of CGPA req from 9 to 8 for direct admission to PhD for BTechB.Arch qualified students.pdf
+Q4      2     yes  InternshipGuidelinesUGPG.pdf
+Q5      -       -  -

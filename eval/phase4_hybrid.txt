@@ -1,0 +1,97 @@
+Eval run: 2026-11-18 16:10 | TOP_K_RESULTS=6
+================================================================================
+Q1: What is the M.Tech tuition fee?
+Expected doc:    FeePG2025-26.pdf
+Expected answer: Rs 35,000 per semester (2025-26, general); mentions older 2024-25 value
+Retrieval rank:  context 1 / deep 1 (sent to LLM: yes)
+--------------------------------------------------------------------------------
+The tuition fee for M.Tech students (Study‑in‑India programme) is **US $ 8,000 per semester** — this is the amount shown in the most recent fee schedule (2025‑26) (FeePG2025-26.pdf, page 9).  
+
+*For DASA & ICCR students, the same document lists the tuition fee as US $ 8,000 (for non‑SAARC countries) or US $ 4,000 (for SAARC countries) per semester (FeePG2025-26.pdf, page 6).*
+--------------------------------------------------------------------------------
+Sources:
+  - FeePG2025-26.pdf | page 9 | public | year 2025-26
+  - PG_2023-24.pdf | page 1 | faculty | year 2023-24
+  - UGRegulationsManual2024.pdf | page 2 | student | year 2024
+  - PG_2023-24.pdf | page 3 | faculty | year 2023-24
+  - FeePG2025-26.pdf | page 6 | public | year 2025-26
+
+================================================================================
+Q2: What is the CGPA to percentage conversion formula?
+Expected doc:    CGPAConversion Formula2016.pdf
+Expected answer: % Marks = CGPA x 10 (2016 order, supersedes 2014)
+Retrieval rank:  context 4 / deep 4 (sent to LLM: yes)
+--------------------------------------------------------------------------------
+The conversion formula used by MNIT Jaipur is:
+
+**Percent Marks = CGPA × 10**  
+
+(see PG_Manual2024S.pdf, page 89; UGRegulationsManual2024.pdf, page 30).
+--------------------------------------------------------------------------------
+Sources:
+  - PG_Manual2024S.pdf | page 89 | faculty | year 2024S
+  - CGPAConversion Formula2014.pdf | page 1 | student | year 2014
+  - UGRegulationsManual2024.pdf | page 30 | student | year 2024
+  - CGPAConversion Formula2016.pdf | page 1 | student | year 2016
+  - PG_Manual2022.pdf | page 80 | faculty | year 2022
+
+================================================================================
+Q3: What is the CGPA requirement for direct PhD admission for B.Tech students?
+Expected doc:    Revision of CGPA req from 9 to 8 for direct admission to PhD for BTechB.Arch qualified students.pdf
+Expected answer: CGPA 8 (reduced from 9 by the 2021 order); PG_Manual2024S may state a different scheme value
+Retrieval rank:  context 3 / deep 9 (sent to LLM: yes)
+--------------------------------------------------------------------------------
+The direct‑admission requirement for a Ph.D. programme for B.Tech (or B.Arch) graduates is a minimum CGPA of **8.0** on a 10‑point scale (reduced from the earlier requirement of 9.0)【Revision of CGPA req from 9 to 8 for direct admission to PhD for BTechB.Arch qualified students.pdf, page 1】.  
+
+*Note: This information comes from a scanned/OCR page, so the value may be inaccurate.*
+--------------------------------------------------------------------------------
+Sources:
+  - PG_Manual2022.pdf | page 50 | faculty | year 2022
+  - PG_Manual2024S.pdf | page 42 | faculty | year 2024S
+  - Revision of CGPA req from 9 to 8 for direct admission to PhD for BTechB.Arch qualified students.pdf | page 1 | faculty | year 2021
+  - PG_Manual2024S.pdf | page 64 | faculty | year 2024S
+  - PG_Manual2024S.pdf | page 41 | faculty | year 2024S
+  - PG_Manual2024S.pdf | page 65 | faculty | year 2024S
+
+================================================================================
+Q4: What is the internship duration for PG students?
+Expected doc:    InternshipGuidelinesUGPG.pdf
+Expected answer: More than 6 months, up to one year; no duplicate sources
+Retrieval rank:  context 4 / deep 4 (sent to LLM: yes)
+--------------------------------------------------------------------------------
+The guidelines state that a PG student may undertake an industrial‑training / internship **during the third or fourth semester of the programme** (PG_Manual2024S, page 75).
+
+The earlier internship guidelines (2021) add that for regular M.Tech./M.Plan. students the internship is normally taken in the **III semester**, with the permissible period **from May 15 to December 31**.  If the internship offer is for **more than six months and up to one year**, it may span the III and IV semesters (InternshipGuidelinesUGPG.pdf, page 2).
+--------------------------------------------------------------------------------
+Sources:
+  - PG_Manual2024S.pdf | page 75 | faculty | year 2024S
+  - PG_Manual2024S.pdf | page 76 | faculty | year 2024S
+  - PG_Manual2022.pdf | page 42 | faculty | year 2022
+  - InternshipGuidelinesUGPG.pdf | page 2 | faculty | year 2021
+  - PG_Manual2024S.pdf | page 60 | faculty | year 2024S
+  - PG_Manual2022.pdf | page 39 | faculty | year 2022
+
+================================================================================
+Q5: Who is the director of IIT Bombay?
+Expected doc:    (none, fallback expected)
+Expected answer: I could not find the answer in the provided documents.
+Retrieval rank:  context - / deep - (sent to LLM: -)
+--------------------------------------------------------------------------------
+I could not find the answer in the provided documents.
+--------------------------------------------------------------------------------
+Sources (hidden in app: exact fallback):
+  - UGRegulationsManual2024.pdf | page 3 | student | year 2024
+  - PG_Manual2022.pdf | page 57 | faculty | year 2022
+  - UGRegulationsManual2024.pdf | page 39 | student | year 2024
+  - PG_Manual2022.pdf | page 59 | faculty | year 2022
+  - PG_Manual2022.pdf | page 15 | faculty | year 2022
+  - PG_Manual2024S.pdf | page 9 | faculty | year 2024S
+
+================================================================================
+SUMMARY
+Q    ctx  deep  to LLM  expected doc
+Q1     1     1     yes  FeePG2025-26.pdf
+Q2     4     4     yes  CGPAConversion Formula2016.pdf
+Q3     3     9     yes  Revision of CGPA req from 9 to 8 for direct admission to PhD for BTechB.Arch qualified students.pdf
+Q4     4     4     yes  InternshipGuidelinesUGPG.pdf
+Q5     -     -       -  -

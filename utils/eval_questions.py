@@ -2,9 +2,12 @@
 Run a fixed set of evaluation questions through the RAG pipeline and print
 the answer, the sources, and the retrieval rank of the expected document.
 
-Rank = position of the first chunk from the expected document in the
-retriever's results (searched up to RANK_DEPTH). The pipeline only sends
-the top TOP_K_RESULTS chunks to the LLM.
+Two ranks are reported for the expected document:
+  - context rank: position among the TOP_K_RESULTS chunks actually sent
+    to the LLM (blank if it was not sent)
+  - deep rank: position in the retriever's results with k=RANK_DEPTH
+With hybrid (BM25 + vector) retrieval the fused order depends on k, so
+the deep rank is indicative only; "sent to LLM" is the ground truth.
 
 Usage:
     python -m utils.eval_questions [--output eval/some_run.txt]
@@ -55,12 +58,12 @@ EVAL_QUESTIONS = [
 ]
 
 
-def retrieval_rank(question: str, expected_doc: str):
+def retrieval_rank(question: str, expected_doc: str, k: int):
     """
-    Return the 1-based rank of the first chunk from expected_doc,
-    or None if it is not within RANK_DEPTH results.
+    Return the 1-based rank of the first chunk from expected_doc
+    when retrieving k chunks, or None if it is not among them.
     """
-    retriever = get_retriever(k=RANK_DEPTH)
+    retriever = get_retriever(k=k)
     documents = retriever.invoke(question)
 
     for rank, doc in enumerate(documents, 1):
@@ -86,17 +89,25 @@ def run_eval():
         is_fallback = answer.strip("\"'").strip() == FALLBACK_ANSWER
 
         if expected_doc:
-            rank = retrieval_rank(question, expected_doc)
-            rank_text = f"{rank}" if rank else f">{RANK_DEPTH}"
-            in_context = "yes" if rank and rank <= TOP_K_RESULTS else "no"
+            ctx_rank = retrieval_rank(question, expected_doc, TOP_K_RESULTS)
+            deep_rank = retrieval_rank(question, expected_doc, RANK_DEPTH)
+            in_context = "yes" if any(
+                source.get("file_name") == expected_doc
+                for source in response.sources
+            ) else "no"
+            ctx_text = f"{ctx_rank}" if ctx_rank else "-"
+            rank_text = f"{deep_rank}" if deep_rank else f">{RANK_DEPTH}"
         else:
-            rank_text, in_context = "-", "-"
+            ctx_text, rank_text, in_context = "-", "-", "-"
 
         print("=" * 80)
         print(f"Q{i}: {question}")
         print(f"Expected doc:    {expected_doc or '(none, fallback expected)'}")
         print(f"Expected answer: {item['expected_answer']}")
-        print(f"Retrieval rank:  {rank_text} (sent to LLM: {in_context})")
+        print(
+            f"Retrieval rank:  context {ctx_text} / deep {rank_text} "
+            f"(sent to LLM: {in_context})"
+        )
         print("-" * 80)
         print(answer)
         print("-" * 80)
@@ -109,13 +120,13 @@ def run_eval():
             )
         print()
 
-        summary.append((i, expected_doc or "-", rank_text, in_context))
+        summary.append((i, expected_doc or "-", ctx_text, rank_text, in_context))
 
     print("=" * 80)
     print("SUMMARY")
-    print(f"{'Q':<3} {'rank':>5} {'in ctx':>7}  expected doc")
-    for i, doc, rank_text, in_context in summary:
-        print(f"Q{i:<2} {rank_text:>5} {in_context:>7}  {doc}")
+    print(f"{'Q':<3} {'ctx':>4} {'deep':>5} {'to LLM':>7}  expected doc")
+    for i, doc, ctx_text, rank_text, in_context in summary:
+        print(f"Q{i:<2} {ctx_text:>4} {rank_text:>5} {in_context:>7}  {doc}")
 
 
 class Tee:

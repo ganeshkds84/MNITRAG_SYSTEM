@@ -12,3 +12,5 @@ python-dotenv
 pypdf
 pytesseract
 pdf2image
+langchain-classic
+rank_bm25

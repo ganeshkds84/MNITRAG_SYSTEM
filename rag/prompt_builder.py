@@ -22,6 +22,10 @@ Rules:
 5. Chunks marked "OCR: yes" come from scanned pages and may contain recognition errors.
    If such text looks garbled or unclear (e.g. broken numbers, symbols or tables),
    say explicitly that the source is a scanned/OCR page and the value may be inaccurate.
+6. Never infer, reconstruct or guess what a garbled OCR passage says, and never claim
+   that it agrees with (or matches) another source. If a passage is unreadable, say that
+   it is unreadable (naming the file and page) and base the answer only on readable text.
+   Only say that sources agree when each of them clearly states the same value.
 
 Context:
 {context}

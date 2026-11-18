@@ -41,7 +41,14 @@ CHUNK_OVERLAP = 200
 # Retrieval Configuration
 # ===========================
 
-TOP_K_RESULTS = 4
+TOP_K_RESULTS = 6
+
+# Hybrid retrieval: BM25 (keyword) + vector (semantic), fused by EnsembleRetriever
+USE_HYBRID_RETRIEVAL = True
+
+BM25_WEIGHT = 0.5
+
+VECTOR_WEIGHT = 0.5
 
 
 # ===========================

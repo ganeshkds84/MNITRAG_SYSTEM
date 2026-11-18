@@ -2,6 +2,7 @@ import streamlit as st
 import os
 
 from rag.pipeline import ask_question
+from rag.prompt_builder import FALLBACK_ANSWER
 from rag.vectordb import get_vector_store_stats
 
 st.set_page_config(
@@ -72,16 +73,11 @@ if st.button("Submit"):
                 question
             )
             
-            answer_text=response.answer.lower()
-            
-            show_sources=True
-            
-            if (
-                "could not find" in answer_text
-                or "not found" in answer_text 
-                or "not available" in answer_text
-            ):
-                show_sources=False
+            # Hide sources only for the exact fallback answer
+            # (ignoring surrounding whitespace/quotes)
+            answer_text=response.answer.strip().strip('"\'').strip()
+
+            show_sources=answer_text!=FALLBACK_ANSWER
             
         st.subheader("Answer")
         
@@ -106,6 +102,9 @@ if st.button("Submit"):
                     )
                 )
                 
+                year=source.get("doc_year","unknown")
+                year_text=f" · {year}" if year!="unknown" else ""
+
                 st.write(
-                    f"📑 {source_name} (Page {page})"
+                    f"📑 {source_name} (Page {page}){year_text}"
                 )

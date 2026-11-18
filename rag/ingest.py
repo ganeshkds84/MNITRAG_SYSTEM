@@ -1,7 +1,9 @@
 import argparse
 import os
+import re
 
 from rag.loader import load_pdf
+from rag.metadata import enrich_metadata, file_hash
 from rag.splitter import split_documents
 from rag.vectordb import (
     get_vector_store,
@@ -12,6 +14,8 @@ def ingest_folder(folder_path: str):
     """
     Recursively ingest all PDFs
     from a folder and its subfolders.
+
+    Byte-identical files (same SHA256) are ingested only once.
     """
     clear_vector_store()
     
@@ -20,9 +24,21 @@ def ingest_folder(folder_path: str):
     total_chunks=0
     total_files=0
     skipped_files=[]
-    
-    for root, _, files in os.walk(folder_path):
-        
+    seen_hashes={}
+
+    for root, dirs, files in os.walk(folder_path):
+
+        dirs.sort()
+
+        # Process originals before copies like "name (1).pdf"
+        files=sorted(
+            files,
+            key=lambda name: (
+                re.search(r"\(\d+\)", name) is not None,
+                name
+            )
+        )
+
         for file_name in files:
             
             if not file_name.lower().endswith(".pdf"):
@@ -37,6 +53,21 @@ def ingest_folder(folder_path: str):
                 f"\nProcessing: {pdf_path}"
             )
             
+            content_hash=file_hash(pdf_path)
+
+            if content_hash in seen_hashes:
+                original=seen_hashes[content_hash]
+                print(
+                    f"Skipping {file_name} "
+                    f"(duplicate of {original})"
+                )
+                skipped_files.append(
+                    f"{pdf_path} (duplicate of {original})"
+                )
+                continue
+
+            seen_hashes[content_hash]=pdf_path
+
             documents=load_pdf(pdf_path)
             
             if not documents:
@@ -59,6 +90,12 @@ def ingest_folder(folder_path: str):
                 f"({ocr_pages} via OCR)"
             )
             
+            documents=enrich_metadata(
+                documents,
+                pdf_path,
+                folder_path
+            )
+
             chunks=split_documents(documents)
             
             if not chunks:

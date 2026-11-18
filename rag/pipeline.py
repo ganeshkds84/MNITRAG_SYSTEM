@@ -46,6 +46,10 @@ def ask_question(
                 'source',
                 'Unknown'
             ),
+            'file_name':doc.metadata.get(
+                'file_name',
+                'Unknown'
+            ),
             'page':doc.metadata.get(
                 'page',
                 'Unknown'
@@ -53,6 +57,14 @@ def ask_question(
             'page_label':doc.metadata.get(
                 'page_label',
                 'Unknown'
+            ),
+            'category':doc.metadata.get(
+                'category',
+                'unknown'
+            ),
+            'doc_year':doc.metadata.get(
+                'doc_year',
+                'unknown'
             )
         }
     

@@ -116,6 +116,84 @@ def readable_title(file_name: str) -> str:
     return " ".join(TITLE_REPLACEMENTS.get(token, token) for token in tokens)
 
 
+FEE_TITLE_PATTERN = re.compile(r"^\s*fee structure for\b", re.IGNORECASE)
+
+# Office-order subjects and policy titles are only taken from the top of a page
+TOP_TITLE_PATTERN = re.compile(
+    r"^\s*(?:\(?[a-zA-Z]\)\s*)?(?:[Ss]ub\s*\.?\s*:\s*[A-Z\"'“]|[Pp]olicy regarding\b)"
+)
+TOP_LINES = 15
+
+# Next lines that start a new paragraph rather than continue a title
+NEW_PARAGRAPH_PATTERN = re.compile(
+    r"^\s*(the senate|in accordance|as per|s\.\s*no|note|head of fee)", re.IGNORECASE
+)
+
+MAX_TITLE_CHARS = 160
+
+
+def _join_title(lines: list[str], index: int) -> str:
+    """
+    Return the title starting at lines[index], joined with the next line
+    when the title clearly continues there (e.g. "... in the" / "session 2025-26").
+    """
+    title = lines[index].strip()
+
+    # Next non-empty line (OCR often leaves a blank line inside a title)
+    next_line = next(
+        (line.strip() for line in lines[index + 1:index + 3] if line.strip()), ""
+    )
+
+    continues = (
+        next_line
+        and not title.endswith(".")
+        and not ANY_YEAR_PATTERN.search(title)
+        and not NEW_PARAGRAPH_PATTERN.match(next_line)
+        and not FEE_TITLE_PATTERN.match(next_line)
+    )
+
+    if continues:
+        title = f"{title} {next_line}"
+
+    return title
+
+
+def _clean_title(title: str) -> str:
+    title = re.sub(r"^\s*(?:\(?[a-z]\)\s*)?sub\s*\.?\s*:\s*", "", title, flags=re.IGNORECASE)
+    title = re.sub(r"(?i)session(?=\d)", "session ", title)
+    title = re.sub(r"\s+", " ", title).strip(" .")
+
+    return title[:MAX_TITLE_CHARS]
+
+
+def extract_page_title(text: str) -> str:
+    """
+    Extract a page's own title line, e.g.
+    "Fee structure for M.Tech. (Full-time) students admitted in the session 2025-26",
+    an office-order subject ("Sub: ...") or a policy title.
+
+    Fee-structure titles are searched on the whole page (in the PDF text
+    layer they sometimes come after the table); a page with two fee tables
+    gets both titles joined by "; ". Returns "" if the page has no clear title.
+    """
+    lines = text.splitlines()
+
+    fee_titles = [
+        _clean_title(_join_title(lines, i))
+        for i, line in enumerate(lines)
+        if FEE_TITLE_PATTERN.match(line)
+    ]
+
+    if fee_titles:
+        return "; ".join(dict.fromkeys(fee_titles))[:2 * MAX_TITLE_CHARS]
+
+    for i, line in enumerate(lines[:TOP_LINES]):
+        if TOP_TITLE_PATTERN.match(line):
+            return _clean_title(_join_title(lines, i))
+
+    return ""
+
+
 def page_number(metadata: dict):
     """
     Human page number: page_label if present, else page + 1.
@@ -131,14 +209,21 @@ def page_number(metadata: dict):
 def build_chunk_header(metadata: dict) -> str:
     """
     Short header prefixed to a chunk before embedding / BM25 indexing, e.g.
-    "Document: Fee PG 2025-26 | Category: public | Year: 2025-26 | Page: 1"
+    "Document: Fee PG 2025-26 | Category: public | Year: 2025-26 | Page: 1 |
+     Section: Fee structure for M.Tech. (Full-time) students admitted in ..."
+    The Section part is left out when the page has no clear title.
     """
-    return (
+    header = (
         f"Document: {readable_title(metadata.get('file_name', ''))} | "
         f"Category: {metadata.get('category', 'unknown')} | "
         f"Year: {metadata.get('doc_year', 'unknown')} | "
         f"Page: {page_number(metadata)}"
     )
+
+    if metadata.get("page_title"):
+        header += f" | Section: {metadata['page_title']}"
+
+    return header
 
 
 def add_chunk_headers(chunks):
@@ -191,8 +276,8 @@ def file_hash(pdf_path: str) -> str:
 
 def enrich_metadata(documents, pdf_path: str, data_root: str):
     """
-    Add file_name, category, doc_year, doc_year_start and doc_year_source
-    to every document. The year comes from the file name, or from the
+    Add file_name, category, doc_year, doc_year_start, doc_year_source and
+    page_title ("" if the page has no clear title) to every document. The year comes from the file name, or from the
     first page text if the file name has none.
     All values are str/int so they can be stored in Chroma.
     """
@@ -213,5 +298,6 @@ def enrich_metadata(documents, pdf_path: str, data_root: str):
         doc.metadata["doc_year"] = doc_year
         doc.metadata["doc_year_start"] = doc_year_start
         doc.metadata["doc_year_source"] = doc_year_source
+        doc.metadata["page_title"] = extract_page_title(doc.page_content)
 
     return documents

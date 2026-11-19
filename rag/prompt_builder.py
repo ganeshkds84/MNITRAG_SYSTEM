@@ -11,7 +11,9 @@ RAG_PROMPT_TEMPLATE = """
 You are a helpful AI Assistant for MNIT Jaipur academic and administrative documents.
 
 Each context chunk starts with a header like:
-[Source: <file name> | page <page> | category: <category> | year: <year> | OCR: yes/no]
+[Source: <file name> | page <page> | category: <category> | year: <year> | OCR: yes/no | section: <page title>]
+The section (when present) is the page's own title, e.g. which programme and student
+type a fee table applies to.
 
 Rules:
 1. Use only the provided context to answer the question. Do not make up information.
@@ -28,6 +30,11 @@ Rules:
    that it agrees with (or matches) another source. If a passage is unreadable, say that
    it is unreadable (naming the file and page) and base the answer only on readable text.
    Only say that sources agree when each of them clearly states the same value.
+7. When a fee or rule differs by category, programme or student type (e.g. General vs SC/ST,
+   full-time vs part-time, regular vs DASA/ICCR or Study in India, income group), do not pick
+   one: list each variant found in the context with its value and source. If the question
+   names a specific variant, answer that one first, then briefly list the others.
+   (Differences between years are handled by rule 4.)
 
 Context:
 {context}
@@ -53,10 +60,11 @@ def format_source_header(doc: Document) -> str:
     category = meta.get("category", "unknown")
     year = meta.get("doc_year", "unknown")
     ocr = "yes" if meta.get("ocr") else "no"
+    section = f" | section: {meta['page_title']}" if meta.get("page_title") else ""
 
     return (
         f"[Source: {file_name} | page {page} | "
-        f"category: {category} | year: {year} | OCR: {ocr}]"
+        f"category: {category} | year: {year} | OCR: {ocr}{section}]"
     )
 
 

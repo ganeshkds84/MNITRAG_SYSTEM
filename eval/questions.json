@@ -15,9 +15,9 @@
   },
   {
     "id": "q03", "type": "fee", "ocr": false,
-    "question": "What is the B.Tech tuition fee per semester for students whose family income is above 5 lakh?",
+    "question": "What is the B.Tech tuition fee per semester for General/OBC students whose family income is above 5 lakh?",
     "expected_file": "FeeUG2025-26.pdf", "expected_page": "1",
-    "expected_answer": "Rs 62,500 per semester (2025-26)",
+    "expected_answer": "Rs 62,500 per semester (2025-26; verified on page image: General/OBC <1 lakh Rs 0, 1-5 lakh Rs 20,834, >5 lakh Rs 62,500; SC/ST/PH Rs 0)",
     "answer_keywords": ["62500"]
   },
   {
@@ -38,7 +38,7 @@
     "id": "q06", "type": "fee", "ocr": true,
     "question": "What was the total fee for the first (odd) semester for a general category M.Tech full-time student admitted in 2024-25?",
     "expected_file": "Fee_Structure_2024-25_PG.pdf", "expected_page": "1",
-    "expected_answer": "Rs 71,815 (Total A+B+C+D, odd semester, general category, session 2024-25)",
+    "expected_answer": "Rs 71,815 (Total A+B+C+D, odd semester, general category, session 2024-25; verified on page image)",
     "answer_keywords": ["71815"]
   },
   {
@@ -66,7 +66,7 @@
     "id": "q10", "type": "CGPA", "ocr": true,
     "question": "What CGPA to percentage conversion formula did MNIT use in 2014?",
     "expected_file": "CGPAConversion Formula2014.pdf", "expected_page": "1",
-    "expected_answer": "Equivalent percentage = (CGPA - 0.5) x 10 (written as (CGPA-0.5)/10 x 100%)",
+    "expected_answer": "Equivalent percentage = [(CGPA - 0.5) / 10] x 100 %, i.e. (CGPA - 0.5) x 10 (verified on page image)",
     "answer_keywords": ["0.5"]
   },
   {
@@ -80,8 +80,9 @@
     "id": "q12", "type": "CGPA", "ocr": true,
     "question": "What is the CGPA requirement for direct PhD admission for B.Tech students?",
     "expected_file": "Revision of CGPA req from 9 to 8 for direct admission to PhD for BTechB.Arch qualified students.pdf", "expected_page": "1",
-    "expected_answer": "CGPA 8 (reduced from 9 by the April 2021 order; only graduates of CFTIs / NIRF top-100 institutions are eligible)",
-    "answer_keywords": ["re:(?<![\\d.])8(\\.0)?(?![\\d.])"]
+    "alternative_sources": [{"file": "PG_Manual2024S.pdf", "page": "32"}],
+    "expected_answer": "CGPA 8 (reduced from 9 by the April 2021 order). PG Manual 2024 (6.6.1(b), p32) states it as 80% marks or equivalent CGPA plus a valid GATE score. Both: only CFTI / NIRF top-100 graduates. (The 8.5 MNIT Scholar Scheme on p41 is a separate scheme.)",
+    "answer_keywords": [["re:(?<![\\d.])8(\\.0)?(?![\\d.])", "80%", "80 %"]]
   },
   {
     "id": "q13", "type": "CGPA", "ocr": true,
@@ -94,7 +95,7 @@
     "id": "q14", "type": "CGPA", "ocr": true,
     "question": "What minimum CGPA was required for the award of the M.Tech degree for students admitted in the session 2020-21?",
     "expected_file": "Minimum_CPGA_requirement_forawardofPGDegrefromthesession2020-21.pdf", "expected_page": "1",
-    "expected_answer": "6.0",
+    "expected_answer": "6.0 (same for M.Plan, M.Sc, MBA; admitted 2020-21 and onwards, later changed to 5.5 from 2021-22; verified on page image)",
     "answer_keywords": ["6.0"]
   },
   {
@@ -120,9 +121,9 @@
   },
   {
     "id": "q18", "type": "promotion", "ocr": false,
-    "question": "What is the maximum number of semesters allowed to complete a B.Tech degree?",
+    "question": "What is the maximum number of registered semesters allowed to complete a B.Tech degree?",
     "expected_file": "UGRegulationsManual2024.pdf", "expected_page": "36",
-    "expected_answer": "14 semesters (16 for B.Arch); maximum duration eight years from admission",
+    "expected_answer": "14 registered semesters (16 for B.Arch); maximum duration eight years from admission including semester withdrawals (consistent with the 2021 internship guidelines: 16 semesters including 2 withdrawals)",
     "answer_keywords": ["14"]
   },
   {

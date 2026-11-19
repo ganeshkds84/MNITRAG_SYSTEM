@@ -4,6 +4,8 @@ Evaluate the RAG pipeline on the question set in eval/questions.json.
 For every question it reports:
   - hit@k:       expected file is among the TOP_K_RESULTS chunks sent to the LLM
   - page hit@k:  expected file AND page are among those chunks
+                 (an optional "alternative_sources" list of {file, page} gives
+                 other sources that answer the question equally well)
   - rank:        position of the first chunk from the expected file
   - correctness: keyword/number match of the answer against answer_keywords,
                  averaged over --runs LLM calls (answers vary between runs).
@@ -233,12 +235,21 @@ def evaluate_config(
                 persist_directory=directory,
             )
 
+            # The expected source plus any equally valid alternative sources
+            valid_sources = [
+                (item["expected_file"], item["expected_page"])
+            ] + [
+                (source["file"], source.get("page"))
+                for source in item.get("alternative_sources", [])
+            ]
+
             rank, page_hit = None, False
             for position, doc in enumerate(documents, 1):
-                if doc.metadata.get("file_name") == item["expected_file"]:
-                    rank = rank or position
-                    if str(page_number(doc.metadata)) == str(item["expected_page"]):
-                        page_hit = True
+                for file_name, page in valid_sources:
+                    if doc.metadata.get("file_name") == file_name:
+                        rank = rank or position
+                        if str(page_number(doc.metadata)) == str(page):
+                            page_hit = True
 
             context = format_context(documents)
             answers = []

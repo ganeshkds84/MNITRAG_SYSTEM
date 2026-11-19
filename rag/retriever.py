@@ -12,7 +12,7 @@ from config.config import (
     USE_HYBRID_RETRIEVAL,
     VECTOR_WEIGHT,
 )
-from rag.vectordb import get_vector_store
+from rag.vectordb import get_vector_store, get_vector_store_version
 
 TOKEN_PATTERN = re.compile(r"\w+")
 
@@ -25,16 +25,14 @@ def bm25_tokenize(text: str) -> list[str]:
     return TOKEN_PATTERN.findall(text.lower())
 
 
-@lru_cache(maxsize=1)
-def get_bm25_retriever() -> BM25Retriever | None:
+@lru_cache(maxsize=4)
+def _build_bm25_retriever(store_version: tuple) -> BM25Retriever | None:
     """
-    Build the BM25 index once from all chunks stored in Chroma and cache it.
-    Restart the app after re-running ingestion to rebuild it.
-
-    Returns:
-        BM25Retriever, or None if the vector store is empty
+    Build a BM25 index from all chunks of the store identified by
+    store_version = (directory, chunk count, sqlite mtime).
     """
-    data = get_vector_store().get(include=["documents", "metadatas"])
+    directory = store_version[0]
+    data = get_vector_store(directory).get(include=["documents", "metadatas"])
 
     documents = [
         Document(page_content=text, metadata=meta or {})
@@ -50,27 +48,48 @@ def get_bm25_retriever() -> BM25Retriever | None:
     )
 
 
-def get_retriever(k: int=TOP_K_RESULTS) -> Runnable:
+def get_bm25_retriever(persist_directory: str | None = None) -> BM25Retriever | None:
+    """
+    Return the cached BM25 index for the vector store. The cache key changes
+    when the store is re-ingested (chunk count / file time), so the index is
+    rebuilt automatically without restarting the app.
+
+    Returns:
+        BM25Retriever, or None if the vector store is empty
+    """
+    return _build_bm25_retriever(get_vector_store_version(persist_directory))
+
+
+def get_retriever(
+    k: int=TOP_K_RESULTS,
+    hybrid: bool | None=None,
+    persist_directory: str | None=None,
+) -> Runnable:
     """
     Create a retriever over the indexed chunks.
 
     Uses hybrid retrieval (BM25 + vector, fused with weighted reciprocal
-    rank) when USE_HYBRID_RETRIEVAL is True, otherwise vector search only.
+    rank) when hybrid is True, otherwise vector search only.
 
     Args:
         k :Number of chunks to retrieve
+        hybrid: Use BM25 + vector (default: USE_HYBRID_RETRIEVAL)
+        persist_directory: Vector store folder (default: VECTOR_DB_DIRECTORY)
 
     Returns:
         Runnable that takes a question and returns up to k Documents
     """
-    vectorstore=get_vector_store()
+    if hybrid is None:
+        hybrid=USE_HYBRID_RETRIEVAL
+
+    vectorstore=get_vector_store(persist_directory)
 
     vector_retriever=vectorstore.as_retriever(
         search_type='similarity',
         search_kwargs={"k":k}
     )
 
-    bm25_retriever=get_bm25_retriever() if USE_HYBRID_RETRIEVAL else None
+    bm25_retriever=get_bm25_retriever(persist_directory) if hybrid else None
 
     if bm25_retriever is None:
         return vector_retriever

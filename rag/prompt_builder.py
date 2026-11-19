@@ -1,6 +1,8 @@
 from langchain_core.documents import Document
 from langchain_core.prompts import PromptTemplate
 
+from rag.metadata import page_number, strip_chunk_header
+
 # Exact sentence returned when the context has no answer.
 # app.py hides sources only when the answer equals this sentence.
 FALLBACK_ANSWER = "I could not find the answer in the provided documents."
@@ -46,9 +48,7 @@ def format_source_header(doc: Document) -> str:
 
     file_name = meta.get("file_name") or meta.get("source", "Unknown")
 
-    page = meta.get("page_label")
-    if not page:
-        page = meta.get("page", -1) + 1 if "page" in meta else "unknown"
+    page = page_number(meta)
 
     category = meta.get("category", "unknown")
     year = meta.get("doc_year", "unknown")
@@ -63,11 +63,12 @@ def format_source_header(doc: Document) -> str:
 def format_context(documents: list[Document])->str:
     """
     Convert retrieved documents into a single context string,
-    prefixing each chunk with its source header.
+    prefixing each chunk with its source header. The contextual chunk
+    header used for embedding (if any) is stripped to avoid duplication.
     """
 
     return '\n\n'.join(
-        f"{format_source_header(doc)}\n{doc.page_content}"
+        f"{format_source_header(doc)}\n{strip_chunk_header(doc)}"
         for doc in documents
     )
 

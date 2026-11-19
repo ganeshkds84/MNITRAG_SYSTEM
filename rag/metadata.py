@@ -84,6 +84,88 @@ def parse_year_from_text(text: str, max_year: int) -> tuple[str, int, str]:
     return UNKNOWN_YEAR, 0, "unknown"
 
 
+# Tokens for turning a file name into a readable title. Order matters:
+# years and known mixed-case terms first, then ALLCAPS runs, then words.
+TITLE_TOKEN_PATTERN = re.compile(
+    r"(?:19|20)\d{2}(?:-\d{4}|-\d{2})?[A-Z]?(?![a-z])"  # 2024-25, 2024S
+    r"|M\.Tech|B\.Tech|B\.Arch|M\.Plan|BTech|MTech|PhD"   # known terms
+    r"|[A-Z]+(?=[A-Z][a-z])"                              # CGPA in CGPAConversion
+    r"|[A-Z]+(?![a-z])"                                   # PG, UG, UFM
+    r"|[A-Z][a-z]+"                                       # Fee, Manual
+    r"|[a-z]+"
+    r"|\d+(?:st|nd|rd|th)(?![a-z])"                       # 1st, 3rd
+    r"|\d+(?:\.\d+)?"
+)
+
+TITLE_REPLACEMENTS = {"BTech": "B.Tech", "MTech": "M.Tech", "UGPG": "UG PG"}
+
+
+def readable_title(file_name: str) -> str:
+    """
+    Turn a file name into a readable title for chunk headers.
+
+    Examples:
+        "FeePG2025-26.pdf"               -> "Fee PG 2025-26"
+        "UGRegulationsManual2024.pdf"    -> "UG Regulations Manual 2024"
+        "CGPAConversion Formula2014.pdf" -> "CGPA Conversion Formula 2014"
+        "...for BTechB.Arch qualified"   -> "... for B.Tech B.Arch qualified"
+    """
+    name = os.path.splitext(file_name)[0]
+    tokens = TITLE_TOKEN_PATTERN.findall(name)
+
+    return " ".join(TITLE_REPLACEMENTS.get(token, token) for token in tokens)
+
+
+def page_number(metadata: dict):
+    """
+    Human page number: page_label if present, else page + 1.
+    """
+    page = metadata.get("page_label")
+
+    if page:
+        return page
+
+    return metadata["page"] + 1 if "page" in metadata else "unknown"
+
+
+def build_chunk_header(metadata: dict) -> str:
+    """
+    Short header prefixed to a chunk before embedding / BM25 indexing, e.g.
+    "Document: Fee PG 2025-26 | Category: public | Year: 2025-26 | Page: 1"
+    """
+    return (
+        f"Document: {readable_title(metadata.get('file_name', ''))} | "
+        f"Category: {metadata.get('category', 'unknown')} | "
+        f"Year: {metadata.get('doc_year', 'unknown')} | "
+        f"Page: {page_number(metadata)}"
+    )
+
+
+def add_chunk_headers(chunks):
+    """
+    Prefix each chunk's text with its header and remember the header in
+    metadata["chunk_header"] so it can be stripped again for the prompt.
+    """
+    for chunk in chunks:
+        header = build_chunk_header(chunk.metadata)
+        chunk.metadata["chunk_header"] = header
+        chunk.page_content = f"{header}\n{chunk.page_content}"
+
+    return chunks
+
+
+def strip_chunk_header(doc) -> str:
+    """
+    Return the chunk text without the header added by add_chunk_headers().
+    """
+    header = doc.metadata.get("chunk_header")
+
+    if header and doc.page_content.startswith(header):
+        return doc.page_content[len(header):].lstrip("\n")
+
+    return doc.page_content
+
+
 def get_category(pdf_path: str, data_root: str) -> str:
     """
     Return the first subfolder under data_root (faculty / student / public).

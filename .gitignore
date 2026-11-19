@@ -31,3 +31,9 @@ vector_store/
 
 # Claude Code local instructions
 CLAUDE.md
+
+# Ablation vector stores (e.g. vector_store_noheaders/)
+vector_store_*/
+
+# Eval LLM answer cache (regenerable)
+eval/cache/

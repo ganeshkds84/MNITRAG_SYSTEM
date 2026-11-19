@@ -52,6 +52,15 @@ VECTOR_WEIGHT = 0.5
 
 
 # ===========================
+# Contextual chunk headers
+# ===========================
+
+# Prefix each chunk with "Document: ... | Category: ... | Year: ... | Page: ..."
+# before embedding and BM25 indexing. Changing this requires re-ingestion.
+USE_CHUNK_HEADERS = True
+
+
+# ===========================
 # OCR Configuration (scanned PDFs)
 # ===========================
 

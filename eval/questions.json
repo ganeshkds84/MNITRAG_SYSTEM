@@ -1,0 +1,233 @@
+[
+  {
+    "id": "q01", "type": "fee", "ocr": false,
+    "question": "What is the M.Tech tuition fee?",
+    "expected_file": "FeePG2025-26.pdf", "expected_page": "1",
+    "expected_answer": "Rs 35,000 per semester for general category M.Tech (Full-time) students admitted in 2025-26 (SC/ST pay only the Rs 1,000 registration fee)",
+    "answer_keywords": ["35000"]
+  },
+  {
+    "id": "q02", "type": "fee", "ocr": false,
+    "question": "What is the tuition fee per semester for full-time PhD students admitted in 2025-26?",
+    "expected_file": "FeePhD2025-26.pdf", "expected_page": "1",
+    "expected_answer": "Rs 7,500 per semester (general category)",
+    "answer_keywords": ["7500"]
+  },
+  {
+    "id": "q03", "type": "fee", "ocr": false,
+    "question": "What is the B.Tech tuition fee per semester for students whose family income is above 5 lakh?",
+    "expected_file": "FeeUG2025-26.pdf", "expected_page": "1",
+    "expected_answer": "Rs 62,500 per semester (2025-26)",
+    "answer_keywords": ["62500"]
+  },
+  {
+    "id": "q04", "type": "fee", "ocr": false,
+    "question": "How much is the refundable institute caution money for M.Tech students?",
+    "expected_file": "FeePG2025-26.pdf", "expected_page": "1",
+    "expected_answer": "Rs 15,000, one-time payment at admission, refundable",
+    "answer_keywords": ["15000"]
+  },
+  {
+    "id": "q05", "type": "fee", "ocr": false,
+    "question": "What is the annual group insurance fee for M.Tech students?",
+    "expected_file": "FeePG2025-26.pdf", "expected_page": "1",
+    "expected_answer": "Rs 787.06 per year (2025-26); it was Rs 765 in 2024-25",
+    "answer_keywords": ["787"]
+  },
+  {
+    "id": "q06", "type": "fee", "ocr": true,
+    "question": "What was the total fee for the first (odd) semester for a general category M.Tech full-time student admitted in 2024-25?",
+    "expected_file": "Fee_Structure_2024-25_PG.pdf", "expected_page": "1",
+    "expected_answer": "Rs 71,815 (Total A+B+C+D, odd semester, general category, session 2024-25)",
+    "answer_keywords": ["71815"]
+  },
+  {
+    "id": "q07", "type": "fee", "ocr": false,
+    "question": "What is the tuition fee for M.Tech DASA students from SAARC countries?",
+    "expected_file": "FeePG2025-26.pdf", "expected_page": "6",
+    "expected_answer": "US $4,000 per semester (US $8,000 for non-SAARC countries)",
+    "answer_keywords": ["4000"]
+  },
+  {
+    "id": "q08", "type": "fee", "ocr": true,
+    "question": "What was the tuition fee for full-time PhD students admitted in the session 2023-24?",
+    "expected_file": "PhD_2023-24.pdf", "expected_page": "1",
+    "expected_answer": "Rs 7,500 per semester (general category)",
+    "answer_keywords": ["7500"]
+  },
+  {
+    "id": "q09", "type": "CGPA", "ocr": false,
+    "question": "What is the CGPA to percentage conversion formula?",
+    "expected_file": "CGPAConversion Formula2016.pdf", "expected_page": "1",
+    "expected_answer": "% Marks = CGPA x 10 (2016 office order, replacing the earlier formula)",
+    "answer_keywords": [["x 10", "multiplying the cgpa by 10", "multiplied by 10", "by a factor of 10"]]
+  },
+  {
+    "id": "q10", "type": "CGPA", "ocr": true,
+    "question": "What CGPA to percentage conversion formula did MNIT use in 2014?",
+    "expected_file": "CGPAConversion Formula2014.pdf", "expected_page": "1",
+    "expected_answer": "Equivalent percentage = (CGPA - 0.5) x 10 (written as (CGPA-0.5)/10 x 100%)",
+    "answer_keywords": ["0.5"]
+  },
+  {
+    "id": "q11", "type": "CGPA", "ocr": false,
+    "question": "What CGPA is treated as First Class for MNIT Jaipur graduates for employment or recruitment purposes?",
+    "expected_file": "Letter_No.2499_.pdf", "expected_page": "1",
+    "expected_answer": "A CGPA of 6.0 or above",
+    "answer_keywords": ["re:(?<![\\d.])6(\\.0)?(?![\\d.])"]
+  },
+  {
+    "id": "q12", "type": "CGPA", "ocr": true,
+    "question": "What is the CGPA requirement for direct PhD admission for B.Tech students?",
+    "expected_file": "Revision of CGPA req from 9 to 8 for direct admission to PhD for BTechB.Arch qualified students.pdf", "expected_page": "1",
+    "expected_answer": "CGPA 8 (reduced from 9 by the April 2021 order; only graduates of CFTIs / NIRF top-100 institutions are eligible)",
+    "answer_keywords": ["re:(?<![\\d.])8(\\.0)?(?![\\d.])"]
+  },
+  {
+    "id": "q13", "type": "CGPA", "ocr": true,
+    "question": "What is the minimum CGPA for semester promotion and award of the M.Tech degree for students admitted from 2021-22 onwards?",
+    "expected_file": "CGPA requirement for semester promotionand award of degree in PG programmes.pdf", "expected_page": "1",
+    "expected_answer": "5.5 for both semester promotion and award of degree",
+    "answer_keywords": ["5.5"]
+  },
+  {
+    "id": "q14", "type": "CGPA", "ocr": true,
+    "question": "What minimum CGPA was required for the award of the M.Tech degree for students admitted in the session 2020-21?",
+    "expected_file": "Minimum_CPGA_requirement_forawardofPGDegrefromthesession2020-21.pdf", "expected_page": "1",
+    "expected_answer": "6.0",
+    "answer_keywords": ["6.0"]
+  },
+  {
+    "id": "q15", "type": "CGPA", "ocr": false,
+    "question": "What is the minimum CGPA required under the MNIT Scholar Scheme for admission to the PhD program?",
+    "expected_file": "PG_Manual2024S.pdf", "expected_page": "41",
+    "expected_answer": "8.5 on a 10-point scale (8.0 for SC/ST); open to the top 10% (15% SC/ST) of MNIT B.Tech/B.Arch graduates of the last three years",
+    "answer_keywords": ["8.5"]
+  },
+  {
+    "id": "q16", "type": "promotion", "ocr": false,
+    "question": "What minimum CGPA must a first-year B.Tech student have at the end of the second semester to be promoted to the third semester?",
+    "expected_file": "Sem_promotion_policy_1st_year.pdf", "expected_page": "1",
+    "expected_answer": "A minimum CGPA of 5 at the end of the first year (otherwise year back)",
+    "answer_keywords": ["re:(?<![\\d.])5(\\.0)?(?![\\d.])"]
+  },
+  {
+    "id": "q17", "type": "promotion", "ocr": true,
+    "question": "According to the 2016 amendment to the UG regulations, how many credits must a student earn by the end of the first year to continue registration?",
+    "expected_file": "Amendment_UG_RR.pdf", "expected_page": "2",
+    "expected_answer": "At least 30 earned credits (including supplementary examination); otherwise academically deficient (year back or termination)",
+    "answer_keywords": ["30"]
+  },
+  {
+    "id": "q18", "type": "promotion", "ocr": false,
+    "question": "What is the maximum number of semesters allowed to complete a B.Tech degree?",
+    "expected_file": "UGRegulationsManual2024.pdf", "expected_page": "36",
+    "expected_answer": "14 semesters (16 for B.Arch); maximum duration eight years from admission",
+    "answer_keywords": ["14"]
+  },
+  {
+    "id": "q19", "type": "promotion", "ocr": false,
+    "question": "What is the minimum attendance required for a UG student to appear in the end-term examination?",
+    "expected_file": "UGRegulationsManual2024.pdf", "expected_page": "30",
+    "expected_answer": "75% of the total classes held in the course",
+    "answer_keywords": ["75"]
+  },
+  {
+    "id": "q20", "type": "PhD", "ocr": false,
+    "question": "What is the maximum duration of a full-time PhD for a student admitted with a PG degree?",
+    "expected_file": "PG_Manual2024S.pdf", "expected_page": "64",
+    "expected_answer": "10 semesters (may be extended by the Senate up to 14 semesters)",
+    "answer_keywords": ["10 semesters"]
+  },
+  {
+    "id": "q21", "type": "PhD", "ocr": true,
+    "question": "How many examiners from within the country and from outside the country must a PhD supervisor propose for the thesis evaluation board?",
+    "expected_file": "Guidelines for constituting the thesis evaluationboard by PhD Supervisor.pdf", "expected_page": "1",
+    "expected_answer": "Four examiners from within the country and four from outside the country",
+    "answer_keywords": [["four", "4"]]
+  },
+  {
+    "id": "q22", "type": "PhD", "ocr": true,
+    "question": "Under the 2020 amendment, when can a full-time PhD student convert to part-time without considering the distance of the place of posting?",
+    "expected_file": "Ammendment2_in_PG_Reglations.pdf", "expected_page": "1",
+    "expected_answer": "After completing the residency requirement, passing the comprehensive examination and giving the state-of-the-art seminar satisfactorily",
+    "answer_keywords": ["comprehensive", "seminar"]
+  },
+  {
+    "id": "q23", "type": "PhD", "ocr": false,
+    "question": "What document must a PhD student working more than 70 km from Jaipur submit from the employer to convert from full-time to part-time?",
+    "expected_file": "FT-PT_PhD.pdf", "expected_page": "1",
+    "expected_answer": "A letter of consent from the employer (replacing the earlier NoC), in the approved format",
+    "answer_keywords": ["consent"]
+  },
+  {
+    "id": "q24", "type": "internship", "ocr": false,
+    "question": "What is the internship duration for PG students?",
+    "expected_file": "InternshipGuidelinesUGPG.pdf", "expected_page": "2",
+    "expected_answer": "III semester (May 15 - Dec 31); an offer of more than 6 months up to one year may span the III and IV semesters",
+    "answer_keywords": [["one year", "1 year"]]
+  },
+  {
+    "id": "q25", "type": "internship", "ocr": false,
+    "question": "What is the upper cap on the number of one-year (VII and VIII semester) internships for B.Tech students?",
+    "expected_file": "InternshipGuidelinesUGPG.pdf", "expected_page": "2",
+    "expected_answer": "Not more than 20% of the total class size",
+    "answer_keywords": ["20"]
+  },
+  {
+    "id": "q26", "type": "regulation", "ocr": false,
+    "question": "What is the maximum program duration for a full-time M.Tech?",
+    "expected_file": "PG_Manual2024S.pdf", "expected_page": "60",
+    "expected_answer": "3 years (minimum residency 1 year)",
+    "answer_keywords": [["3 years", "three years"]]
+  },
+  {
+    "id": "q27", "type": "regulation", "ocr": true,
+    "question": "What is the maximum tenure of the Chairman SUGB?",
+    "expected_file": "Tenure_of_Chairman_SPGB_SUGB.pdf", "expected_page": "1",
+    "expected_answer": "2 years (same for Chairman SPGB)",
+    "answer_keywords": [["2 years", "two years"]]
+  },
+  {
+    "id": "q28", "type": "regulation", "ocr": true,
+    "question": "In clause 13.5 (Exit Options) of the UG Regulations 2024, what was 'B.Sc. (Engg.) Degree' replaced with?",
+    "expected_file": "OO_UG_13.5.pdf", "expected_page": "1",
+    "expected_answer": "\"B.Sc. Degree\" (Senate 59th meeting, July 2025)",
+    "answer_keywords": [["b.sc. degree", "b.sc degree", "bsc degree"]]
+  },
+  {
+    "id": "q29", "type": "UFM", "ocr": false,
+    "question": "What is the punishment if a candidate is found to have copied from unauthorised material in an examination?",
+    "expected_file": "UFM.pdf", "expected_page": "2",
+    "expected_answer": "Cancellation of the present semester examination and F grade in all papers of that semester",
+    "answer_keywords": [["f grade", "fp grade", "'fp'", "failing grade", "fail grade", "grade f", "‘f’", "'f'"], "semester"]
+  },
+  {
+    "id": "q30", "type": "UFM", "ocr": false,
+    "question": "Is a student allowed to keep a switched-off mobile phone during an examination?",
+    "expected_file": "UFM.pdf", "expected_page": "1",
+    "expected_answer": "No. Possessing a mobile phone or any electronic gadget other than a calculator, even switched off, counts as unfair means",
+    "answer_keywords": ["unfair means"]
+  },
+  {
+    "id": "q31", "type": "out-of-scope", "ocr": false,
+    "question": "Who is the director of IIT Bombay?",
+    "expected_file": null, "expected_page": null,
+    "expected_answer": "Fallback sentence",
+    "answer_keywords": []
+  },
+  {
+    "id": "q32", "type": "out-of-scope", "ocr": false,
+    "question": "Who won the 2022 FIFA World Cup?",
+    "expected_file": null, "expected_page": null,
+    "expected_answer": "Fallback sentence",
+    "answer_keywords": []
+  },
+  {
+    "id": "q33", "type": "out-of-scope", "ocr": false,
+    "question": "What is the hostel mess fee at IIT Delhi?",
+    "expected_file": null, "expected_page": null,
+    "expected_answer": "Fallback sentence",
+    "answer_keywords": []
+  }
+]

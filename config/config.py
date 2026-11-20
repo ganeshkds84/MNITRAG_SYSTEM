@@ -61,6 +61,23 @@ USE_CHUNK_HEADERS = True
 
 
 # ===========================
+# Table-row chunks (fee PDFs)
+# ===========================
+
+# Add one self-contained chunk per fee-table row, rebuilt from the PDF's
+# embedded text layer (word positions). Changing this requires re-ingestion.
+USE_TABLE_ROWS = True
+
+# Only these files have a usable embedded text layer; the older fee PDFs
+# are image-only scans and are not parsed (see README "Known limitations").
+TABLE_ROW_FILES = [
+    "FeePG2025-26.pdf",
+    "FeePhD2025-26.pdf",
+    "FeeUG2025-26.pdf",
+]
+
+
+# ===========================
 # OCR Configuration (scanned PDFs)
 # ===========================
 

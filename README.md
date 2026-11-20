@@ -277,6 +277,14 @@ MNITRAG_SYSTEM improves information accessibility by enabling students, faculty,
 
 ---
 
+## ⚠️ Known Limitations
+
+* **Fee tables in older scanned PDFs are not parsed into rows.** `Fee_Structure_2024-25_*.pdf`, `PG_2023-24.pdf`, `PhD_2023-24.pdf` and `UG_2023-24.pdf` are image-only scans. They are indexed through Tesseract OCR as plain text, so table columns (General vs SC/ST, odd vs even semester) are often lost or garbled, and answers about those years' fees may be incomplete.
+* **Table rows exist only for the 2025-26 fee PDFs** (`FeePG2025-26.pdf`, `FeePhD2025-26.pdf`, `FeeUG2025-26.pdf`, set in `TABLE_ROW_FILES`). These are also scans, but the scanner embedded an OCR text layer; rows are rebuilt from its word positions (`rag/table_rows.py`). OCR spelling errors in row labels (e.g. "Reeistration") are kept as-is, and values in unusual cells (e.g. "US $ 8000 + ...") may be skipped. Check rows with `python -m rag.table_rows`.
+* **Answer accuracy is measured with keyword/number matching** (`utils/eval_questions.py`), which cannot tell when a correct number is attached to the wrong category.
+
+---
+
 ## 🔮 Future Enhancements
 
 * Hybrid retrieval (semantic + keyword)

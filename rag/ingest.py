@@ -2,9 +2,10 @@ import argparse
 import os
 import re
 
-from config.config import USE_CHUNK_HEADERS
+from config.config import TABLE_ROW_FILES, USE_CHUNK_HEADERS, USE_TABLE_ROWS
 from rag.loader import load_pdf
 from rag.metadata import add_chunk_headers, enrich_metadata, file_hash
+from rag.table_rows import build_table_row_documents
 from rag.splitter import split_documents
 from rag.vectordb import (
     get_vector_store,
@@ -15,6 +16,7 @@ def ingest_folder(
     folder_path: str,
     use_headers: bool=USE_CHUNK_HEADERS,
     persist_directory: str | None=None,
+    use_table_rows: bool=USE_TABLE_ROWS,
 ):
     """
     Recursively ingest all PDFs
@@ -26,14 +28,18 @@ def ingest_folder(
         folder_path: Folder containing PDFs
         use_headers: Prefix chunks with a contextual header before embedding
         persist_directory: Vector store folder (default: VECTOR_DB_DIRECTORY)
+        use_table_rows: Also add one chunk per fee-table row for TABLE_ROW_FILES
     """
     clear_vector_store(persist_directory)
 
     vector_store=get_vector_store(persist_directory)
 
     print(
-        f"Chunk headers: {'on' if use_headers else 'off'}"
+        f"Chunk headers: {'on' if use_headers else 'off'} | "
+        f"table rows: {'on' if use_table_rows else 'off'}"
     )
+
+    total_table_rows=0
     
     total_chunks=0
     total_files=0
@@ -122,6 +128,18 @@ def ingest_folder(
                 )
                 continue
 
+            for chunk in chunks:
+                chunk.metadata["chunk_type"]="text"
+
+            # Fee-table rows as extra, self-contained chunks
+            if use_table_rows and file_name in TABLE_ROW_FILES:
+                rows=build_table_row_documents(pdf_path, documents)
+                chunks+=rows
+                total_table_rows+=len(rows)
+                print(
+                    f"Added {len(rows)} table-row chunks"
+                )
+
             if use_headers:
                 chunks=add_chunk_headers(chunks)
 
@@ -143,7 +161,8 @@ def ingest_folder(
     )
     
     print(
-        f"Stored {total_chunks} chunks"
+        f"Stored {total_chunks} chunks "
+        f"({total_table_rows} of them table rows)"
     )
     
     if skipped_files:
@@ -162,7 +181,7 @@ def main():
     """
     Command-line entry point:
         python -m rag.ingest [--data-dir data/Raw] [--db-dir DIR]
-                             [--headers on|off]
+                             [--headers on|off] [--table-rows on|off]
     """
     parser=argparse.ArgumentParser(
         description="Rebuild the vector store from a folder of PDFs."
@@ -183,6 +202,12 @@ def main():
         default="on" if USE_CHUNK_HEADERS else "off",
         help="Contextual chunk headers (default: USE_CHUNK_HEADERS in config)"
     )
+    parser.add_argument(
+        "--table-rows",
+        choices=["on","off"],
+        default="on" if USE_TABLE_ROWS else "off",
+        help="Fee-table row chunks (default: USE_TABLE_ROWS in config)"
+    )
     args=parser.parse_args()
 
     if not os.path.isdir(args.data_dir):
@@ -191,7 +216,8 @@ def main():
     ingest_folder(
         args.data_dir,
         use_headers=args.headers=="on",
-        persist_directory=args.db_dir
+        persist_directory=args.db_dir,
+        use_table_rows=args.table_rows=="on"
     )
 
 

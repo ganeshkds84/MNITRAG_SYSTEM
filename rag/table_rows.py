@@ -44,6 +44,27 @@ LINE_MERGE_Y = 5         # label words this close in y form one line
 COLUMN_GAP = 25          # x gap that separates two value columns
 COLUMN_WINDOW = 40       # header words within this x distance name a column
 
+# How an empty cell ("-" in the PDF) is written, so the LLM does not read it
+# as missing data. In category columns (General vs SC/ST, income groups) a
+# blank means the fee is not charged; in tables whose columns are different
+# student types (DASA / CIWG / MEA ...) it means the row does not apply.
+NOT_CHARGED_TEXT = "nil (not charged)"
+NOT_APPLICABLE_TEXT = "n/a"
+
+CATEGORY_COLUMNS = ("General", "General/OBC", "SC/ST", "SC/ST/PH", "All categories")
+
+
+def _empty_cell_text(column_name: str) -> str:
+    """
+    "nil (not charged)" for category columns, "n/a" for student-type columns.
+    """
+    is_category = (
+        column_name in CATEGORY_COLUMNS
+        or column_name.lower().startswith(("income", "general/obc income"))
+    )
+
+    return NOT_CHARGED_TEXT if is_category else NOT_APPLICABLE_TEXT
+
 SECTION_LINE = re.compile(r"^\s*(?:[A-D]\.|\(common|s\.\s*no|note\b)", re.IGNORECASE)
 
 TITLE_PATTERN = re.compile(
@@ -314,12 +335,16 @@ def _table_rows(table_words, values, labels, anchors, columns, header_words,
             if not keep:
                 continue
             by_semester.setdefault(column["semester"], []).append(
-                f"{column['name']}: {cell}"
+                (column["name"], cell)
             )
 
-        for semester, parts in by_semester.items():
-            if all(p.endswith(": -") for p in parts):
+        for semester, cells in by_semester.items():
+            if all(cell == "-" for _, cell in cells):
                 continue
+            parts = [
+                f"{name}: {_empty_cell_text(name) if cell == '-' else cell}"
+                for name, cell in cells
+            ]
             fields = [document, programme, semester, label] + parts
             lines_out.append(" | ".join(f for f in fields if f))
 

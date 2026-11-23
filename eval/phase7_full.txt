@@ -1,0 +1,359 @@
+Phase 7 full run: hybrid retrieval, chunk headers on (with Section), table rows on, 1 LLM run.
+Note: run before empty table cells were written as "nil (not charged)" (they were "-").
+Scoring caveats (by manual reading): q10 scored CORRECT but answer is wrong (concludes CGPA x 10);
+q30 scored WRONG but answer is correct (says prohibited, without the words "unfair means").
+
+Eval run: 2026-11-20 15:37 | 33 questions | model openai/gpt-oss-120b | k=6
+
+### Config: hybrid_headers-on (store: vector_store, k=6, runs=1)
+  q01 fee          hit=Y page=Y rank=1 correct=1/1
+  q02 fee          hit=Y page=Y rank=1 correct=1/1
+  q03 fee          hit=Y page=Y rank=1 correct=1/1
+  q04 fee          hit=Y page=Y rank=1 correct=1/1
+  q05 fee          hit=Y page=Y rank=1 correct=1/1
+  q06 fee          hit=Y page=N rank=3 correct=0/1
+  q07 fee          hit=Y page=Y rank=4 correct=1/1
+  q08 fee          hit=Y page=N rank=1 correct=0/1
+  q09 CGPA         hit=Y page=Y rank=3 correct=1/1
+  q10 CGPA         hit=Y page=Y rank=1 correct=1/1
+  q11 CGPA         hit=Y page=Y rank=1 correct=1/1
+  q12 CGPA         hit=Y page=Y rank=1 correct=1/1
+  q13 CGPA         hit=Y page=Y rank=1 correct=1/1
+  q14 CGPA         hit=Y page=Y rank=3 correct=1/1
+  q15 CGPA         hit=Y page=Y rank=1 correct=1/1
+  q16 promotion    hit=Y page=Y rank=1 correct=1/1
+  q17 promotion    hit=Y page=Y rank=1 correct=1/1
+  q18 promotion    hit=Y page=Y rank=1 correct=1/1
+  q19 promotion    hit=Y page=Y rank=1 correct=1/1
+  q20 PhD          hit=Y page=Y rank=1 correct=1/1
+  q21 PhD          hit=Y page=Y rank=3 correct=1/1
+  q22 PhD          hit=Y page=Y rank=4 correct=1/1
+  q23 PhD          hit=Y page=Y rank=1 correct=1/1
+  q24 internship   hit=Y page=Y rank=3 correct=1/1
+  q25 internship   hit=Y page=Y rank=1 correct=1/1
+  q26 regulation   hit=Y page=Y rank=1 correct=1/1
+  q27 regulation   hit=Y page=Y rank=1 correct=1/1
+  q28 regulation   hit=Y page=Y rank=1 correct=1/1
+  q29 UFM          hit=Y page=Y rank=3 correct=1/1
+  q30 UFM          hit=Y page=Y rank=2 correct=0/1
+  q31 out-of-scope hit=- page=- rank=- correct=1/1
+  q32 out-of-scope hit=- page=- rank=- correct=1/1
+  q33 out-of-scope hit=- page=- rank=- correct=1/1
+
+================================================================================
+DETAILS: hybrid_headers-on
+================================================================================
+q01 [fee] What is the M.Tech tuition fee?
+Expected: FeePG2025-26.pdf p1 | Rs 35,000 per semester for general category M.Tech (Full-time) students admitted in 2025-26 (SC/ST pay only the Rs 1,000 registration fee)
+Retrieval: hit=True page_hit=True rank=1
+Context: FeePG2025-26.pdf p1, FeePG2025-26.pdf p4, UGRegulationsManual2024.pdf p2
+--- run 1: CORRECT
+**M.Tech tuition fee (2025‑26)**  
+
+| Programme / Category | Semester | Tuition fee (₹) | Source |
+|----------------------|----------|----------------|--------|
+| **M.Tech (Full‑time) – General** | Even semester | 35 000 | (FeePG2025-26.pdf, page 1) |
+| M.Tech (Full‑time) – General | Odd semester | 35 000 | (FeePG2025-26.pdf, page 1) |
+| **M.Tech (Part‑time) – General** | Even semester | 35 000 | (FeePG2025-26.pdf, page 4) |
+| M.Tech (Part‑time) – General | Odd semester | 35 000 | (FeePG2025-26.pdf, page 4) |
+| **M.Tech (Part‑time) – Institute Faculty/Staff** | Even semester | 2 500 | (FeePG2025-26.pdf, page 4) |
+
+*No separate tuition‑fee amounts are listed for SC/ST categories (marked “‑”).*
+================================================================================
+q02 [fee] What is the tuition fee per semester for full-time PhD students admitted in 2025-26?
+Expected: FeePhD2025-26.pdf p1 | Rs 7,500 per semester (general category)
+Retrieval: hit=True page_hit=True rank=1
+Context: FeePhD2025-26.pdf p1, FeePhD2025-26.pdf p2, FeePhD2025-26.pdf p3
+--- run 1: CORRECT
+The tuition fee for full‑time Ph.D. students admitted in the 2025‑26 session is **₹ 7,500 per semester** (General category; no fee listed for SC/ST)【FeePhD2025-26.pdf, page 1】.
+================================================================================
+q03 [fee] What is the B.Tech tuition fee per semester for General/OBC students whose family income is above 5 lakh?
+Expected: FeeUG2025-26.pdf p1 | Rs 62,500 per semester (2025-26; verified on page image: General/OBC <1 lakh Rs 0, 1-5 lakh Rs 20,834, >5 lakh Rs 62,500; SC/ST/PH Rs 0)
+Retrieval: hit=True page_hit=True rank=1
+Context: FeeUG2025-26.pdf p1, FeeUG2025-26.pdf p2, FeeUG2025-26.pdf p5, UG_2023-24.pdf p1, UG_2023-24.pdf p5
+--- run 1: CORRECT
+The tuition fee for B.Tech. students (General/OBC) whose family income is **above ₹5 lakh** is **₹62,500 per semester** (2025‑26 academic year)【FeeUG2025-26.pdf, page 1】.
+
+*Earlier value:* The same amount (₹62,500 per semester) was listed for the 2023‑24 session【UG_2023-24.pdf, page 1】. The newer 2025‑26 figure is therefore used.
+================================================================================
+q04 [fee] How much is the refundable institute caution money for M.Tech students?
+Expected: FeePG2025-26.pdf p1 | Rs 15,000, one-time payment at admission, refundable
+Retrieval: hit=True page_hit=True rank=1
+Context: FeePG2025-26.pdf p1, FeePG2025-26.pdf p4, FeePG2025-26.pdf p6, FeePG2025-26.pdf p9, FeeUG2025-26.pdf p1, FeeUG2025-26.pdf p7
+--- run 1: CORRECT
+The refundable Institute Caution Money for all categories of M.Tech students is **₹ 15,000**.
+
+- Full‑time M.Tech (General and SC/ST): ₹ 15,000 (FeePG2025-26.pdf, page 1)  
+- Part‑time M.Tech (General and SC/ST): ₹ 15,000 (FeePG2025-26.pdf, page 4)  
+- M.Tech (Study in India programme): ₹ 15,000 (FeePG2025-26.pdf, page 9)  
+- M.Tech DASA & ICCR students: ₹ 15,000 (FeePG2025-26.pdf, page 6)
+
+All listed variants specify the same amount, so the refundable Institute Caution Money for any M.Tech student in the 2025‑26 session is ₹ 15,000.
+================================================================================
+q05 [fee] What is the annual group insurance fee for M.Tech students?
+Expected: FeePG2025-26.pdf p1 | Rs 787.06 per year (2025-26); it was Rs 765 in 2024-25
+Retrieval: hit=True page_hit=True rank=1
+Context: FeePG2025-26.pdf p1, FeePG2025-26.pdf p4, FeeUG2025-26.pdf p4, PG_2023-24.pdf p4, PG_2023-24.pdf p7
+--- run 1: CORRECT
+The annual group‑insurance fee for M.Tech students is:
+
+| Programme / Category | Year | Fee (Annual) | Source |
+|----------------------|------|--------------|--------|
+| **Full‑time M.Tech (public / General & SC‑ST)** | 2025‑26 | **₹ 787.06** | (FeePG2025-26.pdf, page 1) |
+| **Part‑time M.Tech (public / General & SC‑ST)** | 2025‑26 | **₹ 787.06** | (FeePG2025-26.pdf, page 4) |
+| **M.Tech DASA & ICCR (Study‑in‑India) students** | 2023‑24* | **₹ 765.00** (OCR page – value may be inaccurate) | (PG_2023-24.pdf, page 4) |
+
+*The 2023‑24 figure comes from a scanned/OCR page, so the number could contain recognition errors. The most recent official values (2025‑26) for public full‑time and part‑time M.Tech students are ₹ 787.06 per year.
+================================================================================
+q06 [fee, OCR] What was the total fee for the first (odd) semester for a general category M.Tech full-time student admitted in 2024-25?
+Expected: Fee_Structure_2024-25_PG.pdf p1 | Rs 71,815 (Total A+B+C+D, odd semester, general category, session 2024-25; verified on page image)
+Retrieval: hit=True page_hit=False rank=3
+Context: FeePG2025-26.pdf p1, Fee_Structure_2024-25_PG.pdf p3, Fee_Structure_2024-25_PhD.pdf p2, Fee_Structure_2024-25_PhD.pdf p3
+--- run 1: WRONG
+I could not find the answer in the provided documents.
+================================================================================
+q07 [fee] What is the tuition fee for M.Tech DASA students from SAARC countries?
+Expected: FeePG2025-26.pdf p6 | US $4,000 per semester (US $8,000 for non-SAARC countries)
+Retrieval: hit=True page_hit=True rank=4
+Context: FeePG2025-26.pdf p6, FeeUG2025-26.pdf p3
+--- run 1: CORRECT
+The tuition fee for M. Tech. DASA students from SAARC countries is **US $ 4,000** per odd semester (2025‑26 session)【FeePG2025-26.pdf, page 6】.
+================================================================================
+q08 [fee, OCR] What was the tuition fee for full-time PhD students admitted in the session 2023-24?
+Expected: PhD_2023-24.pdf p1 | Rs 7,500 per semester (general category)
+Retrieval: hit=True page_hit=False rank=1
+Context: FeePhD2025-26.pdf p1, FeePhD2025-26.pdf p2, PG_2023-24.pdf p1, PhD_2023-24.pdf p3, UG_2023-24.pdf p5
+--- run 1: WRONG
+I could not find the answer in the provided documents.
+================================================================================
+q09 [CGPA] What is the CGPA to percentage conversion formula?
+Expected: CGPAConversion Formula2016.pdf p1 | % Marks = CGPA x 10 (2016 office order, replacing the earlier formula)
+Retrieval: hit=True page_hit=True rank=3
+Context: CGPAConversion Formula2014.pdf p1, CGPAConversion Formula2016.pdf p1, PG_Manual2022.pdf p80, PG_Manual2024S.pdf p89, UGRegulationsManual2024.pdf p30
+--- run 1: CORRECT
+The conversion formula adopted by MNIT Jaipur is:
+
+**% Marks = CGPA × 10**
+
+* This is the formula given in the 2024 undergraduate regulations (UGRegulationsManual2024.pdf, page 30) and in the 2024 postgraduate manual (PG_Manual2024S.pdf, page 89).  
+* Earlier documents (e.g., the 2016 Senate order and the 2014 OCR page) state the same relationship, but the 2024 source is the most recent.  
+
+So, to obtain a percentage from a CGPA on the 10‑point scale, multiply the CGPA by 10.   (Sources: UGRegulationsManual2024.pdf, p. 30; PG_Manual2024S.pdf, p. 89)
+================================================================================
+q10 [CGPA, OCR] What CGPA to percentage conversion formula did MNIT use in 2014?
+Expected: CGPAConversion Formula2014.pdf p1 | Equivalent percentage = [(CGPA - 0.5) / 10] x 100 %, i.e. (CGPA - 0.5) x 10 (verified on page image)
+Retrieval: hit=True page_hit=True rank=1
+Context: CGPAConversion Formula2014.pdf p1, CGPAConversion Formula2016.pdf p1, PG_Manual2022.pdf p80, PG_Manual2024S.pdf p89, UGRegulationsManual2024.pdf p30
+--- run 1: CORRECT
+The 2014 document *CGPAConversion Formula2014.pdf* (page 1) gives a conversion formula for CGPA to percentage. The scanned/OCR text reads:
+
+> “CGPA—0.5 equivalent — percentage = 10 × 100%”
+
+Because this page is marked **OCR: yes**, the text is garbled and may contain recognition errors. Interpreting the readable parts, the intended formula appears to be:
+
+**Percentage = CGPA × 10**  
+
+(However, due to the OCR‑related inaccuracies, this value should be verified against a clear source.)  
+
+(Source: CGPAConversion Formula2014.pdf, page 1 – scanned/OCR page).
+================================================================================
+q11 [CGPA] What CGPA is treated as First Class for MNIT Jaipur graduates for employment or recruitment purposes?
+Expected: Letter_No.2499_.pdf p1 | A CGPA of 6.0 or above
+Retrieval: hit=True page_hit=True rank=1
+Context: Letter_No.2499_.pdf p1, PG_Manual2022.pdf p15, PG_Manual2022.pdf p20, PG_Manual2024S.pdf p36, PG_Manual2024S.pdf p52, UGRegulationsManual2024.pdf p8
+--- run 1: CORRECT
+A CGPA of **6.0 or above** is regarded as First Class for MNIT Jaipur graduates when they apply for employment or recruitment with external organisations (Letter_No.2499_.pdf, page 1, 2020).
+================================================================================
+q12 [CGPA, OCR] What is the CGPA requirement for direct PhD admission for B.Tech students?
+Expected: Revision of CGPA req from 9 to 8 for direct admission to PhD for BTechB.Arch qualified students.pdf p1 | CGPA 8 (reduced from 9 by the April 2021 order). PG Manual 2024 (6.6.1(b), p32) states it as 80% marks or equivalent CGPA plus a valid GATE score. Both: only CFTI / NIRF top-100 graduates. (The 8.5 MNIT Scholar Scheme on p41 is a separate scheme.)
+Retrieval: hit=True page_hit=True rank=1
+Context: PG_Manual2022.pdf p50, PG_Manual2024S.pdf p32, PG_Manual2024S.pdf p41, Revision of CGPA req from 9 to 8 for direct admission to PhD for BTechB.Arch qualified students.pdf p1, Sem_promotion_policy_1st_year.pdf p9, Semester_Promotion_Policy_2015.pdf p2
+--- run 1: CORRECT
+The Senate decision (April 2021) lowered the CGPA needed for **direct PhD admission of B.Tech (and B.Arch) graduates to 8.0 on a 10‑point scale**.  This applies to all departments, but only to students who have graduated from CFTIs or other institutes that rank within the top 100 of the NIRF list 【Revision of CGPA req from 9 to 8 for direct admission to PhD for BTechB.Arch qualified students.pdf, page 1】.
+================================================================================
+q13 [CGPA, OCR] What is the minimum CGPA for semester promotion and award of the M.Tech degree for students admitted from 2021-22 onwards?
+Expected: CGPA requirement for semester promotionand award of degree in PG programmes.pdf p1 | 5.5 for both semester promotion and award of degree
+Retrieval: hit=True page_hit=True rank=1
+Context: CGPA requirement for semester promotionand award of degree in PG programmes.pdf p1, Minimum_CPGA_requirement_forawardofPGDegrefromthesession2020-21.pdf p1, PG_Manual2022.pdf p19, PG_Manual2022.pdf p50, PG_Manual2024S.pdf p61, Sem_promotion_policy_1st_year.pdf p9
+--- run 1: CORRECT
+For students admitted from the 2021‑22 session onward, the minimum CGPA required for **both semester promotion and the award of the M.Tech degree is 5.5**【CGPA requirement for semester promotionand award of degree in PG programmes.pdf, page 1】.
+
+*Earlier guidance (for the 2020‑21 session) listed a higher requirement of 6.0 CGPA for the award of the M.Tech degree【Minimum_CPGA_requirement_forawardofPGDegrefromthesession2020-21.pdf, page 1】, but the 2021 Senate order supersedes it for admissions from 2021‑22 onward.*
+================================================================================
+q14 [CGPA, OCR] What minimum CGPA was required for the award of the M.Tech degree for students admitted in the session 2020-21?
+Expected: Minimum_CPGA_requirement_forawardofPGDegrefromthesession2020-21.pdf p1 | 6.0 (same for M.Plan, M.Sc, MBA; admitted 2020-21 and onwards, later changed to 5.5 from 2021-22; verified on page image)
+Retrieval: hit=True page_hit=True rank=3
+Context: CGPA requirement for semester promotionand award of degree in PG programmes.pdf p1, Minimum_CPGA_requirement_forawardofPGDegrefromthesession2020-21.pdf p1, PG_Manual2022.pdf p19, PG_Manual2022.pdf p50, PG_Manual2024S.pdf p53, PG_Manual2024S.pdf p61
+--- run 1: CORRECT
+The minimum CGPA required for the award of the M.Tech. degree for students admitted in the session 2020‑21 was **6.0 on the 10‑point scale** (see Minimum_CPGA_requirement_forawardofPGDegrefromthesession2020-21.pdf, page 1).  
+
+*Note: This information comes from a scanned/OCR page, so the value may be inaccurate.*
+================================================================================
+q15 [CGPA] What is the minimum CGPA required under the MNIT Scholar Scheme for admission to the PhD program?
+Expected: PG_Manual2024S.pdf p41 | 8.5 on a 10-point scale (8.0 for SC/ST); open to the top 10% (15% SC/ST) of MNIT B.Tech/B.Arch graduates of the last three years
+Retrieval: hit=True page_hit=True rank=1
+Context: PG_Manual2022.pdf p15, PG_Manual2022.pdf p50, PG_Manual2024S.pdf p31, PG_Manual2024S.pdf p32, PG_Manual2024S.pdf p41, PG_Manual2024S.pdf p42
+--- run 1: CORRECT
+The MNIT Scholar Scheme requires a **minimum CGPA of 8.5 on a 10‑point scale** for most candidates, with a **relaxed minimum CGPA of 8.0** for SC/ST candidates (2024‑S scheme)【PG_Manual2024S.pdf, page 41】.  
+
+*Older reference (2022) gives the same values – 8.5 for general candidates and 8.0 for SC/ST candidates*【PG_Manual2022.pdf, page 15】.
+================================================================================
+q16 [promotion] What minimum CGPA must a first-year B.Tech student have at the end of the second semester to be promoted to the third semester?
+Expected: Sem_promotion_policy_1st_year.pdf p1 | A minimum CGPA of 5 at the end of the first year (otherwise year back)
+Retrieval: hit=True page_hit=True rank=1
+Context: Amendment_UG_RR.pdf p2, PG_Manual2022.pdf p50, PG_Manual2022.pdf p52, Sem_promotion_policy_1st_year.pdf p1, Sem_promotion_policy_1st_year.pdf p8
+--- run 1: CORRECT
+A first‑year B.Tech student must have a **minimum CGPA of 5.0** at the end of the second semester (i.e., at the end of the first year) in order to be allowed to proceed to the third semester. (Sem_promotion_policy_1st_year.pdf, page 1)
+================================================================================
+q17 [promotion, OCR] According to the 2016 amendment to the UG regulations, how many credits must a student earn by the end of the first year to continue registration?
+Expected: Amendment_UG_RR.pdf p2 | At least 30 earned credits (including supplementary examination); otherwise academically deficient (year back or termination)
+Retrieval: hit=True page_hit=True rank=1
+Context: Amendment_UG_RR.pdf p1, Amendment_UG_RR.pdf p2, UGRegulationsManual2024.pdf p16, UGRegulationsManual2024.pdf p17, UGRegulationsManual2024.pdf p34
+--- run 1: CORRECT
+According to the 2016 amendment to the UG regulations, a student must earn **at least 30 credits** by the end of the first year to be allowed to continue registration (Amendment_UG_RR.pdf, page 2).
+================================================================================
+q18 [promotion] What is the maximum number of registered semesters allowed to complete a B.Tech degree?
+Expected: UGRegulationsManual2024.pdf p36 | 14 registered semesters (16 for B.Arch); maximum duration eight years from admission including semester withdrawals (consistent with the 2021 internship guidelines: 16 semesters including 2 withdrawals)
+Retrieval: hit=True page_hit=True rank=1
+Context: Amendment_UG_RR.pdf p1, FeeUG2025-26.pdf p1, PG_Manual2022.pdf p33, UGRegulationsManual2024.pdf p36
+--- run 1: CORRECT
+The regulations state that a B.Tech. student must complete all degree requirements in **a maximum of 14 registered semesters** (the limit is 16 semesters for B.Arch.)【UGRegulationsManual2024.pdf, page 36】.
+================================================================================
+q19 [promotion] What is the minimum attendance required for a UG student to appear in the end-term examination?
+Expected: UGRegulationsManual2024.pdf p30 | 75% of the total classes held in the course
+Retrieval: hit=True page_hit=True rank=1
+Context: InternshipGuidelinesUGPG.pdf p2, UGRegulationsManual2024.pdf p20, UGRegulationsManual2024.pdf p23, UGRegulationsManual2024.pdf p30, UGRegulationsManual2024.pdf p31
+--- run 1: CORRECT
+A UG student must have at least **75 % attendance** of the total classes held in a course to be eligible to appear in the End‑Term Examination. (UGRegulationsManual2024.pdf, page 30)
+================================================================================
+q20 [PhD] What is the maximum duration of a full-time PhD for a student admitted with a PG degree?
+Expected: PG_Manual2024S.pdf p64 | 10 semesters (may be extended by the Senate up to 14 semesters)
+Retrieval: hit=True page_hit=True rank=1
+Context: Amendment_PG_Regulation.pdf p7, PG_Manual2024S.pdf p38, PG_Manual2024S.pdf p60, PG_Manual2024S.pdf p64, PG_Manual2024S.pdf p65
+--- run 1: CORRECT
+The maximum duration for a **full‑time PhD** (off‑campus) **admitted with a PG degree** is **10 semesters** (subject to possible extension up to 14 semesters by the Senate)【PG_Manual2024S.pdf, page 64】.
+================================================================================
+q21 [PhD, OCR] How many examiners from within the country and from outside the country must a PhD supervisor propose for the thesis evaluation board?
+Expected: Guidelines for constituting the thesis evaluationboard by PhD Supervisor.pdf p1 | Four examiners from within the country and four from outside the country
+Retrieval: hit=True page_hit=True rank=3
+Context: Guidelines for constituting the thesis evaluationboard by PhD Supervisor.pdf p1, PG_Manual2022.pdf p59, PG_Manual2022.pdf p60, PG_Manual2024S.pdf p69, PG_Manual2024S.pdf p70
+--- run 1: CORRECT
+A Ph.D. supervisor must put forward **four examiners from within India and four examiners from outside India** for the thesis evaluation board.  
+
+- The 2024‑S PG Manual states: “The thesis supervisor shall propose four examiners from within the country and another four examiners from outside the country.” (PG_Manual2024S.pdf, page 69)  
+- The 2022 PG Manual gives the same requirement: “The thesis supervisor(s) shall propose four examiners from within the country and another four examiners from outside the country.” (PG_Manual2022.pdf, page 59)  
+
+Thus, the current (2024) rule is four domestic and four foreign examiners; the earlier (2022) rule matches this value.
+================================================================================
+q22 [PhD, OCR] Under the 2020 amendment, when can a full-time PhD student convert to part-time without considering the distance of the place of posting?
+Expected: Ammendment2_in_PG_Reglations.pdf p1 | After completing the residency requirement, passing the comprehensive examination and giving the state-of-the-art seminar satisfactorily
+Retrieval: hit=True page_hit=True rank=4
+Context: Ammendment2_in_PG_Reglations.pdf p1, PG_Manual2022.pdf p34, PG_Manual2022.pdf p43, PG_Manual2024S.pdf p48, PG_Manual2024S.pdf p49
+--- run 1: CORRECT
+According to the 2020 amendment, a full‑time Ph.D. student may be converted to the Part‑Time Ph.D. category **without taking the distance of the posting into account** when the student has:
+
+* Completed the residency requirement,  
+* Successfully completed the comprehensive examination, and  
+* Delivered a satisfactory state‑of‑the‑art seminar.  
+
+(Amendment2_in_PG_Reglations.pdf, page 1 – OCR page; the scanned/OCR source may contain recognition errors.)
+================================================================================
+q23 [PhD] What document must a PhD student working more than 70 km from Jaipur submit from the employer to convert from full-time to part-time?
+Expected: FT-PT_PhD.pdf p1 | A letter of consent from the employer (replacing the earlier NoC), in the approved format
+Retrieval: hit=True page_hit=True rank=1
+Context: FT-PT_PhD.pdf p1, PG_Manual2022.pdf p23, PG_Manual2022.pdf p35, PG_Manual2024S.pdf p35
+--- run 1: CORRECT
+A Ph.D. student whose employer is located more than 70 km from Jaipur must obtain and submit a **Letter of Consent (Consent letter) from the employer** in the institute‑approved format before converting from full‑time to part‑time/off‑campus status. (PG_Manual2022.pdf, page 35; FT‑PT_PhD.pdf, page 1)
+================================================================================
+q24 [internship] What is the internship duration for PG students?
+Expected: InternshipGuidelinesUGPG.pdf p2 | III semester (May 15 - Dec 31); an offer of more than 6 months up to one year may span the III and IV semesters
+Retrieval: hit=True page_hit=True rank=3
+Context: InternshipGuidelinesUGPG.pdf p1, InternshipGuidelinesUGPG.pdf p2, PG_Manual2022.pdf p39, PG_Manual2024S.pdf p75, PG_Manual2024S.pdf p76
+--- run 1: CORRECT
+The institute recommends that a postgraduate (PG) student’s industrial internship be **for a period of six months up to a maximum of one year**【InternshipGuidelinesUGPG.pdf, page 1】.
+================================================================================
+q25 [internship] What is the upper cap on the number of one-year (VII and VIII semester) internships for B.Tech students?
+Expected: InternshipGuidelinesUGPG.pdf p2 | Not more than 20% of the total class size
+Retrieval: hit=True page_hit=True rank=1
+Context: Credit_Consideration.pdf p11, FeePG2025-26.pdf p8, InternshipGuidelinesUGPG.pdf p1, InternshipGuidelinesUGPG.pdf p2, PG_Manual2024S.pdf p45, UGRegulationsManual2024.pdf p31
+--- run 1: CORRECT
+The guidelines state that the upper cap on the number of one‑year (VII and VIII semester) internships for B.Tech students shall not exceed **20 % of the total class size** (InternshipGuidelinesUGPG.pdf, page 2).
+================================================================================
+q26 [regulation] What is the maximum program duration for a full-time M.Tech?
+Expected: PG_Manual2024S.pdf p60 | 3 years (minimum residency 1 year)
+Retrieval: hit=True page_hit=True rank=1
+Context: PG_Manual2022.pdf p42, PG_Manual2022.pdf p43, PG_Manual2024S.pdf p60, UGRegulationsManual2024.pdf p36
+--- run 1: CORRECT
+The maximum program duration for a **full‑time M.Tech** (or M.Plan) is **3 years** (as stated in the 2024‑S regulations)【PG_Manual2024S.pdf, page 60】.  
+
+(An earlier 2022 manual also lists a maximum of 3 years for full‑time M.Tech, but the most recent source (2024‑S) is used.)
+================================================================================
+q27 [regulation, OCR] What is the maximum tenure of the Chairman SUGB?
+Expected: Tenure_of_Chairman_SPGB_SUGB.pdf p1 | 2 years (same for Chairman SPGB)
+Retrieval: hit=True page_hit=True rank=1
+Context: PG_Manual2022.pdf p17, PG_Manual2022.pdf p62, PG_Manual2024S.pdf p11, Tenure_of_Chairman_SPGB_SUGB.pdf p1, UGRegulationsManual2024.pdf p3, UGRegulationsManual2024.pdf p4
+--- run 1: CORRECT
+The maximum tenure of the Chairman of the Senate Undergraduate Board (SUGB) is two years. This is stated in the 2024 Undergraduate Regulations Manual (page 4) and was also specified in the 2021 Office Order (page 1) — both indicating a two‑year term.  
+
+Sources: (UGRegulationsManual2024.pdf, page 4); (Tenure_of_Chairman_SPGB_SUGB.pdf, page 1).
+================================================================================
+q28 [regulation, OCR] In clause 13.5 (Exit Options) of the UG Regulations 2024, what was 'B.Sc. (Engg.) Degree' replaced with?
+Expected: OO_UG_13.5.pdf p1 | "B.Sc. Degree" (Senate 59th meeting, July 2025)
+Retrieval: hit=True page_hit=True rank=1
+Context: OO_UG_13.5.pdf p1, PG_Manual2024S.pdf p44, UGRegulationsManual2024.pdf p37, UGRegulationsManual2024.pdf p38
+--- run 1: CORRECT
+The correction order states that the wording “B.Sc. (Engg.) Degree” was to be replaced with **“B.Sc. Degree.”** (OO_UG_13.5.pdf, page 1 – scanned/OCR page, so the text may contain recognition errors).
+================================================================================
+q29 [UFM] What is the punishment if a candidate is found to have copied from unauthorised material in an examination?
+Expected: UFM.pdf p2 | Cancellation of the present semester examination and F grade in all papers of that semester
+Retrieval: hit=True page_hit=True rank=3
+Context: Amendment_PG_Regulation.pdf p4, PG_Manual2022.pdf p67, PG_Manual2022.pdf p68, PG_Manual2024S.pdf p80, UFM.pdf p1, UFM.pdf p2
+--- run 1: CORRECT
+The regulations state that a candidate who is found to have **copied from or used unauthorised material** must have **the present semester examination cancelled** and will be **awarded a failing grade for all papers of that semester**.
+
+- **2024 (most recent)** – The PG Rules & Regulations specify cancellation of the semester examination and an **‘FP’ grade** in every paper of that semester, with all the usual consequences. (PG_Manual2024S.pdf, page 80)  
+- **Earlier versions** – The 2022 manual, the 2013 amendment, and the undated UFM document give the same punishment but describe the grade simply as **‘F’** (cancellation of the semester exam and F grade in all papers). (PG_Manual2022.pdf, page 68; Amendment_PG_Regulation.pdf, page 4; UFM.pdf, page 2)
+
+Thus, the current (2024) punishment is cancellation of the semester exam and an ‘FP’ grade in all papers.
+================================================================================
+q30 [UFM] Is a student allowed to keep a switched-off mobile phone during an examination?
+Expected: UFM.pdf p1 | No. Possessing a mobile phone or any electronic gadget other than a calculator, even switched off, counts as unfair means
+Retrieval: hit=True page_hit=True rank=2
+Context: Amendment_PG_Regulation.pdf p2, PG_Manual2022.pdf p66, PG_Manual2024S.pdf p78, UFM.pdf p1, UGRegulationsManual2024.pdf p41
+--- run 1: WRONG
+No. The regulations state that a mobile phone (or any electronic gadget other than a calculator) is prohibited **even if it is switched off**, because it could still be used for communication or copying during the exam.  
+
+- UGRegulationsManual2024.pdf, page 41: “Mobile phone or any electronic gadget other than calculator, even in switch‑off mode, which can potentially be used for communication or copying.”  
+- PG_Manual2024S.pdf, page 78: “Mobile Phones, smart watches, Bluetooth devices or any electronic gadget other than a scientific calculator, even in switch‑off mode, which can potentially be used for communication or copying.”  
+
+Therefore, a student may not keep a switched‑off mobile phone in the examination hall.
+================================================================================
+q31 [out-of-scope] Who is the director of IIT Bombay?
+Expected: (fallback) | Fallback sentence
+Retrieval: hit=False page_hit=False rank=None
+Context: PG_Manual2022.pdf p15, PG_Manual2022.pdf p57, PG_Manual2022.pdf p59, PG_Manual2024S.pdf p9, UGRegulationsManual2024.pdf p3, UGRegulationsManual2024.pdf p39
+--- run 1: CORRECT
+I could not find the answer in the provided documents.
+================================================================================
+q32 [out-of-scope] Who won the 2022 FIFA World Cup?
+Expected: (fallback) | Fallback sentence
+Retrieval: hit=False page_hit=False rank=None
+Context: FeeUG2025-26.pdf p3, PG_Manual2022.pdf p13, PG_Manual2022.pdf p15, PG_Manual2022.pdf p21
+--- run 1: CORRECT
+I could not find the answer in the provided documents.
+================================================================================
+q33 [out-of-scope] What is the hostel mess fee at IIT Delhi?
+Expected: (fallback) | Fallback sentence
+Retrieval: hit=False page_hit=False rank=None
+Context: Amendment_UG_Regulation.pdf p3, Fee_Structure_2024-25_PG.pdf p8, PG_2023-24.pdf p3, PG_2023-24.pdf p5, PG_Manual2022.pdf p68, UGRegulationsManual2024.pdf p2
+--- run 1: CORRECT
+I could not find the answer in the provided documents.
+
+SUMMARY hybrid_headers-on
+  hit@6:            100%  (30 in-scope questions)
+  page hit@6:       93%
+  OCR hit@6:        100%  (11 OCR questions)
+  accuracy in-scope: 90%
+  accuracy OCR:      82%
+  out-of-scope:      100%
+  accuracy overall:  91%
